@@ -1,0 +1,210 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Suite Setup	Start work
+Suite Teardown	Run	kill.bat
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Test Cases ***
+Customer make new tweet with only text
+	[Tags]	SMD-2220
+	[Documentation]	TW: Public Tweet: Customer send new tweet/reply/retweet with only text
+	Test Customer make new tweet	with only text
+
+Customer make new tweet with link
+	[Tags]	SMD-2234
+	[Documentation]	TW: Public Tweet: Customer send new tweet/reply/retweet with link
+	Test Customer make new tweet	with link : https://www.google.com
+
+Customer make new tweet with emojis
+	[Tags]	SMD-3825
+	[Documentation]	TW: Public Tweet: Customer send new tweet/reply/retweet with emojis
+	Test Customer make new tweet	with emojis :-) :-D :-(
+
+Customer make new tweet with image
+	[Tags]	SMD-2221
+	[Documentation]	TW: Public Tweet: Customer send new tweet/reply/retweet with image attached
+	Test Customer make new tweet	with image
+
+Customer make new tweet with only text and agent reply
+	[Tags]	SMD-2229
+	[Documentation]	TW: Public Tweet: Customer send new tweet with only text and Agent reply
+	Run	kill.bat
+	WDE.Start App
+	WDE.Do Login
+	WDE.Set Agent Status Ready
+	WDE.Accept Pending Interactions
+	Test Customer make new tweet agent reply	with only text
+
+Customer make new tweet with image and agent reply
+	[Tags]	SMD-2233
+	[Documentation]	TW: Public Tweet: Customer send new tweet with image attached and Agent reply
+	Test Customer make new tweet agent reply	with image
+
+Customer make new tweet with link and agent reply
+	[Tags]	SMD-2235
+	[Documentation]	TW: Public Tweet: Customer send new tweet with link and Agent reply
+	Test Customer make new tweet agent reply	with link : https://www.google.com
+
+Customer make new tweet with emojis and agent reply
+	[Tags]	SMD-2236
+	[Documentation]	TW: Public Tweet: Customer send new tweet with emojis and Agent reply
+	Test Customer make new tweet agent reply	with emojis :-) :-D :-(
+
+Customer make new tweet with only text and agent reply from workbin
+	[Tags]	SMD-3932
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with only text from workbin
+	Run	kill.bat
+	WDE.Start App
+	WDE.Do Login
+	WDE.Set Agent Status Ready
+	WDE.Accept Pending Interactions
+	Test Customer make new tweet agent reply from workbin	with only text
+
+Customer make new tweet with image and agent reply from workbin
+	[Tags]	SMD-3933
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with image from workbin
+	Test Customer make new tweet agent reply from workbin	with image
+
+Customer make new tweet with link and agent reply from workbin
+	[Tags]	SMD-3934
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with link from workbin
+	Test Customer make new tweet agent reply from workbin	with link : https://www.google.com
+
+Customer make new tweet with emojis and agent reply from workbin
+	[Tags]	SMD-3935
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with emojis from workbin
+	Test Customer make new tweet agent reply from workbin	with emojis :-) :-D :-(
+
+Customer make new tweet with only text and agent reply from My History
+	[Tags]	SMD-3942
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with only text from My History
+	Run	kill.bat
+	WDE.Start App
+	WDE.Do Login
+	WDE.Set Agent Status Ready
+	WDE.Accept Pending Interactions
+	Test Customer make new tweet agent reply from history	with only text
+
+Customer make new tweet with link and agent reply from My History
+	[Tags]	SMD-3944
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with link from My History
+	Test Customer make new tweet agent reply from history	with link : https://www.google.com
+
+Customer make new tweet with emojis and agent reply from My History
+	[Tags]	SMD-3945
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with emojis from My History
+	Test Customer make new tweet agent reply from history	with emojis :-) :-D :-(
+
+Customer make new tweet with image and agent reply from My History
+	[Tags]	SMD-3943
+	[Documentation]	TW: Public Tweet: Agent reply to customer tweet with image from My History
+	Test Customer make new tweet agent reply from history	with image
+
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Test Customer make new tweet
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- Hello, OFA. I need some help with this image. ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- Hello, OFA. I need some help. ${with_option} ${global_id}
+	Agent receive and mark done
+	Run Keyword If	'${with_option}' == 'with image'	Customer reply to own status update with image	Twitter- Can anyone help me with this image? ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer reply to own status update	Twitter- Can anyone help me? ${with_option} ${global_id}
+	Agent receive and mark done
+
+Customer send new tweet
+	[Arguments]	${tweet_text}
+	Twitter.Customer Post Tweet	@${brand_mention} ${tweet_text}
+
+Customer send new tweet with image
+	[Arguments]	${tweet_text}	${image_name}
+	Twitter.Customer Post Tweet With Image	@${brand_mention} ${tweet_text}	${image_name}
+
+Customer reply to own status update
+	[Arguments]	${reply_text}
+	Twitter.Customer Reply To Last Status	@${brand_mention} ${reply_text}
+
+Customer reply to own status update with image
+	[Arguments]	${reply_text}	${image_name}
+	Twitter.Customer Reply To Last Status With Image	@${brand_mention} ${reply_text}	${image_name}
+
+Agent receive and mark done
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+
+Agent receive and reply
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} Hi. How can we help you? ${global_id}
+
+Test Customer make new tweet agent reply
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- Help required with image. Urgently !! ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- Help required. Urgently !! ${with_option} ${global_id}
+	Agent receive and reply	${with_option}
+
+Test Customer make new tweet agent reply from workbin
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- How's the weather like today? ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- How's the weather like today? ${with_option} ${global_id}
+	Agent receive and reply from workbin	${with_option}
+
+Agent receive and reply from workbin
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	We expect it to be a sunny day today. ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Status Agent	@${customer_mention} We expect it to be a sunny day today. ${global_id}
+
+Test Customer make new tweet agent reply from history
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- Do you have any vacancies? ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- Do you have any vacancies? ${with_option} ${global_id}
+	Agent receive and reply from history	${with_option}
+
+Agent receive and reply from history
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet My History
+	WDE.Agent Enter Tweet Text	Hi. Please refer to our Careers section. ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post My History
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Status Agent	@${customer_mention} Hi. Please refer to our Careers section. ${global_id}

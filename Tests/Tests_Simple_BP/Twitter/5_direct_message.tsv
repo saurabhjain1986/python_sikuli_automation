@@ -1,0 +1,71 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Suite Setup	Start work
+Suite Teardown	Run	kill.bat
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Test Cases ***
+Customer send new DM with only text and agent reply
+	[Tags]	SMD-2209
+	[Documentation]	TW: Direct Message: Customer send new DM with text only and Agent reply
+	Test Customer send new DM agent reply	with only text
+
+# Currently, twitter4j doesn't support attaching images in DM
+Customer send new DM with image and agent reply
+	[Tags]	SMD-2225
+	[Documentation]	TW: Direct Message: Customer send new DM with image attached and Agent reply
+	Test Customer send new DM agent reply	with image
+
+Customer send new DM with link and agent reply
+	[Tags]	SMD-2231
+	[Documentation]	TW: Direct Message: Customer send new DM with link and Agent reply
+	Test Customer send new DM agent reply	with link : https://www.google.com
+
+Customer send new DM with emojis and agent reply
+	[Tags]	SMD-2232
+	[Documentation]	TW: Direct Message: Customer send new DM with emojis and Agent reply
+	Test Customer send new DM agent reply	with emojis : :) :( :D
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Test Customer send new DM agent reply
+	[Arguments]	${with_option}
+	Customer send new DM	Twitter- Hi OFA. ${with_option} ${global_id}
+	Agent receive and reply	${with_option}
+	Customer send new DM	Twitter- Please help me with this code. ${with_option} ${global_id}
+	Agent receive and mark done
+
+Customer send new DM
+	[Arguments]	${dm_text}
+	Twitter.Customer Send Dm	${dm_text}
+
+Agent receive and reply
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	Hello. How can we help you? ${global_id} ${with_option}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	Hello. How can we help you? ${global_id}
+
+Agent receive and mark done
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done

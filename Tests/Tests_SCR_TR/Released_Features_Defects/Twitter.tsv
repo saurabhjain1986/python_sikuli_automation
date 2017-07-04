@@ -1,0 +1,94 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+*** Test Cases ***
+TW: Previosly sent messages are not showed for the interaction which is moved to workbin
+	[Tags]	SMD-3798
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (1) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	2
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Twitter- How can we help you? ${global_id}
+	WDE.Send Post
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	3
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+TW : Sorting mismatch of twitter grouping interaction
+	[Tags]	SMD-3697
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (1) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (3) Hello, OFA. I need some help. ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+TW : Outbound tweet reply on twitter group are attached to wrong incoming tweet
+	[Tags]	SMD-3707
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (1) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (3) Hello, OFA. I need some help. ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Close Workbin
+	[Teardown]	Run	kill.bat
+
+TW grouping: Tweets grouping breaks when a tweet has link and other doesnot.
+	[Tags]	SMD-3684
+	[Setup]	Start work
+	Twitter.Customer Post Tweet With Image	@${brand_mention} Twitter- (1) Hello, OFA. I need some help. ${global_id}	test.png
+	Sleep	10s
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet With Image	@${brand_mention} Twitter- (3) Hello, OFA. I need some help. ${global_id}	test.png
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	3
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat

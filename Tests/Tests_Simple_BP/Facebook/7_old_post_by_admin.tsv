@@ -1,0 +1,78 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+Variables	facebook_config.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+${Comment_Id}
+
+*** Keywords ***
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+
+
+*** Test Cases ***
+
+Customer send comment on old post by Admin with only text
+	[Tags]	SMD-4012
+	[Setup]	Run Keywords	Start work
+	${PREFIX} =	Get Time	epoch
+	${Comment_Id} =	Facebook.Send Comment On old post by Admin	Facebook- This is an automated comment level-1 by customer on old post by Admin with only text ${PREFIX}
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-2 by agent on old post by Admin with only text ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment level-2 by agent on old post by Admin with only text ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on old post by Admin with image
+	[Tags]	SMD-4013
+	[Setup]	Run Keywords	Start work
+	${PREFIX} =	Get Time	epoch
+	${Comment_Id} =	Facebook.Send Comment On old post by Admin	Facebook- This is an automated comment level-1 by customer on old post by Admin with image ${PREFIX}	StaticImage.png
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Static Image
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-2 by agent on old post by Admin with image ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment level-2 by agent on old post by Admin with image ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on old post by Admin with link
+	[Tags]	SMD-4014
+	[Setup]	Run Keywords	Start work
+	${PREFIX} =	Get Time	epoch
+	${Comment_Id} =	Facebook.Send Comment On old post by Admin	Facebook- This is an automated comment level-1 by customer on old post by Admin with link https://www.google.com ${PREFIX}
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-2 by agent on old post by Admin with link https://www.google.com ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment level-2 by agent on old post by Admin with link https://www.google.com ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on old post by Admin with emojis
+	[Tags]	SMD-4015
+	[Setup]	Run Keywords	Start work
+	${PREFIX} =	Get Time	epoch
+	${Comment_Id} =	Facebook.Send Comment On old post by Admin	Facebook- This is an automated comment level-1 by customer on old post by Admin with emojis :-) :-D :-( ${PREFIX}
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	${PREFIX} Facebook- This is an automated comment level-2 by agent on old post by Admin with emojis :-) :-D :-(
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	${PREFIX} Facebook- This is an automated comment level-2 by agent on old post by Admin with emojis
+	[Teardown]	Run	kill.bat

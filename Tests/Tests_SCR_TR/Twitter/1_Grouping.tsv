@@ -1,0 +1,397 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+
+*** Test Cases ***
+Customer send group of tweets with only text
+	[Tags]	SMD-3740
+	[Documentation]	TW: Group Incoming Tweets with existing queued/unrouted tweets
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Hello, OFA. I need some help. ${global_id}
+	Agent receive and verify count	3
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 2 tweets and 2 reply with only text
+	[Tags]	SMD-3741
+	[Documentation]	TW: Group Incoming Tweets with existing queued/unrouted tweets when customer sends combination of tweets
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) How's the weather? ${global_id}
+	Sleep	7s
+	Customer send new tweet	Twitter- (2) How's the weather? ${global_id}
+	Sleep	7s
+	Customer reply to own status update	Twitter- (1) Can anyone help? ${global_id}
+	Sleep	7s
+	Customer reply to own status update	Twitter- (2) Can anyone help? ${global_id}
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 2 tweets, 2 reply and 2 tweets with only text
+	[Tags]	SMD-3742
+	[Documentation]	TW: Group Incoming Tweets when customer sends combination of  tweets and reply tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Your website looks cool ${global_id}
+	Sleep	7s
+	Customer send new tweet	Twitter- (2) Your website looks cool ${global_id}
+	Sleep	7s
+	Customer reply to own status update	Twitter- (1) Who's the developer? ${global_id}
+	Sleep	7s
+	Customer reply to own status update	Twitter- (2) Who's the developer? ${global_id}
+	Sleep	7s
+	Customer send new tweet	Twitter- (3) Your website looks cool ${global_id}
+	Sleep	7s
+	Customer send new tweet	Twitter- (4) Your website looks cool ${global_id}
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 2 reply, 2 DM and 2 retweets with only text
+	[Tags]	SMD-3743
+	[Documentation]	TW: Group Incoming Tweets when customer sends combination of Reply tweets, Direct Messages and Retweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- I am sending you a sample tweet ${global_id}
+	Agent receive and verify count	1
+	WDE.Mark Interaction Done
+	Customer reply to own status update	Twitter- (1) Where should I login? ${global_id}
+	Sleep	7s
+	Customer reply to own status update	Twitter- (2) Where should I login? ${global_id}
+	Sleep	7s
+	Twitter.Customer Send Dm	Twitter- (1) Login process is being complex ${global_id}
+	Sleep	7s
+	Twitter.Customer Send Dm	Twitter- (2) Login process is being complex ${global_id}
+	Sleep	7s
+	Customer retweet last status update	Twitter- (1) ${global_id}
+	Sleep	7s
+	Customer retweet last status update	Twitter- (2) ${global_id}
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 2 tweets, 2 DM, 2 reply and 2 tweets with only text
+	[Tags]	SMD-3748
+	[Documentation]	TW: Group Incoming Tweets when customer sends combination of text tweets, Reply tweets & Direct Messages
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Have a good day! ${global_id}
+	Sleep	5s
+	Customer send new tweet	Twitter- (2) Have a good day! ${global_id}
+	Sleep	5s
+	Twitter.Customer Send Dm	Twitter- (1) Nice weather today! ${global_id}
+	Sleep	5s
+	Twitter.Customer Send Dm	Twitter- (2) Nice weather today! ${global_id}
+	Sleep	5s
+	Customer reply to own status update	Twitter- (1) How's the weather there? ${global_id}
+	Sleep	5s
+	Customer reply to own status update	Twitter- (2) How's the weather there? ${global_id}
+	Sleep	5s
+	Customer send new tweet	Twitter- (1) Is there any outage? ${global_id}
+	Sleep	5s
+	Customer send new tweet	Twitter- (2) Is there any outage? ${global_id}
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	2
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 3 tweets with image
+	[Tags]	SMD-3749
+	[Documentation]	TW: Group Incoming Tweets when customer sends multiple text tweets with image attached to each tweet.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet with image	Twitter- (1) I like this picture ${global_id}	test.png
+	Sleep	10s
+	Customer send new tweet with image	Twitter- (2) I like this picture ${global_id}	test.png
+	Sleep	10s
+	Customer send new tweet with image	Twitter- (3) I like this picture ${global_id}	test.png
+	Agent receive interaction
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of 3 tweets with mentions
+	[Tags]	SMD-3750
+	[Documentation]	TW: Group Incoming Tweets when customer sends Combination of tweets with mentions
+	[Setup]	Run Keywords	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- (1) Does mentions makes difference? ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	Twitter- (3) I don't @${brand_mention} think so ${global_id}
+	Sleep	10s
+	Twitter.Customer Post Tweet	Twitter- (4) I don't @${brand_mention} think so ${global_id}
+	Agent receive and verify count	3
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent reply
+	[Tags]	SMD-3751
+	[Documentation]	TW: Group Incoming Tweets with existing queued/unrouted tweets
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Hello, OFA. I need some help. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Hello, OFA. I need some help. ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent send DM
+	[Tags]	SMD-3752
+	[Documentation]	TW: Group Incoming Tweets with existing queued/unrouted tweets
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) What a lovely weather. ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	I bet you love this weather ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets within and after grouping timeout
+	[Tags]	SMD-3753
+	[Documentation]	TW: Group Incoming Tweets when customer sends a group of tweets within grouping timespan and a group of tweets after grouping timespan.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) This is within timeout ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) This is within timeout ${global_id}
+	Sleep	70s
+	Customer send new tweet	Twitter- (3) This is after timeout ${global_id}
+	Agent receive and verify count	2
+	WDE.Mark Interaction Done
+	Agent receive and verify count	1
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent reply to all
+	[Tags]	SMD-3757
+	[Documentation]	TW: Group Incoming Tweets when Agent Replies to first tweet in all the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	We are glad you lke our work ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent retweet
+	[Tags]	SMD-3758
+	[Documentation]	TW: Group Incoming Tweets when  Agent Retweet the first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Where do I find you previous interaction? ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Where do I find you previous interaction? ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Where do I find you previous interaction? ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Retweet
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent retweet with comment
+	[Tags]	SMD-3759
+	[Documentation]	TW: Group Incoming Tweets when Agent Retweet with Comments the first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Retweet With Comments
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send 3 tweets with only text and agent send DM
+	[Tags]	SMD-3760
+	[Documentation]	TW: Group Incoming Tweets when Agent sends Direct Message to the first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) What a lovely weather. ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	I bet you love this weather ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent reply to all with image
+	[Tags]	SMD-3761
+	[Documentation]	TW: Group Incoming Tweets when Agent Reply to All and attach image to first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	We are glad you lke our work ${global_id}
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent retweet with comment with image
+	[Tags]	SMD-3762
+	[Documentation]	TW: Group Incoming Tweets when Agent Retweet with Comments and attach image to the first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Retweet With Comments
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send 3 tweets with only text and agent send DM with image
+	[Tags]	SMD-3763
+	[Documentation]	TW: Group Incoming Tweets when Agent sends Direct Message with image attached to the first tweet in the group thread of tweets.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) What a lovely weather. ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	I bet you love this weather ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent reply to all from workbin
+	[Tags]	SMD-3764
+	[Documentation]	TW: Group Incoming Tweets when Agent moves the interaction to workbin.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	We are glad you lke our work ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent retweet from workbin
+	[Tags]	SMD-3765
+	[Documentation]	TW: Group Incoming Tweets when Agent Retweet the first tweet in the group thread of tweets from workbin.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Where do I find you previous interaction? ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Where do I find you previous interaction? ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Where do I find you previous interaction? ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Retweet
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send group of tweets with only text and agent retweet with comment from workbin
+	[Tags]	SMD-3766
+	[Documentation]	TW: Group Incoming Tweets when Agent Retweet with Comments the first tweet in the group thread of tweets from workbin.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) Oh, this is again a fantastic job ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) Oh, this is again a fantastic job ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Retweet With Comments
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+Customer send 3 tweets with only text and agent send DM from workbin
+	[Tags]	SMD-3767
+	[Documentation]	TW: Group Incoming Tweets when Agent sends Direct Message to the first tweet in the group thread of tweets from workbin.
+	[Setup]	Run Keywords	Start work
+	Customer send new tweet	Twitter- (1) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (2) What a lovely weather. ${global_id}
+	Sleep	10s
+	Customer send new tweet	Twitter- (3) What a lovely weather. ${global_id}
+	Agent receive and verify count	3
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Group Tweets Count	3
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	I bet you love this weather ${global_id}
+	WDE.Send Post
+	[Teardown]	Run Keywords	WDE.Mark Interaction Done	AND	Run	kill.bat
+
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Customer send new tweet
+	[Arguments]	${tweet_text}
+	Twitter.Customer Post Tweet	@${brand_mention} ${tweet_text}
+
+Customer send new tweet with image
+	[Arguments]	${tweet_text}	${image_name}
+	Twitter.Customer Post Tweet With Image	@${brand_mention} ${tweet_text}	${image_name}
+
+Agent receive and verify count
+	[Arguments]	${tweet_count}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Group Tweets Count	${tweet_count}
+
+Agent receive interaction
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+
+Customer reply to own status update
+	[Arguments]	${reply_text}
+	Twitter.Customer Reply To Last Status	@${brand_mention} ${reply_text}
+
+Customer retweet last status update
+	[Arguments]	${retweet_text}
+	Twitter.Customer Retweet Last Status	RT @${brand_mention} ${retweet_text}

@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.0 (Jython 2.7.0 on java1.8.0_131)" generated="20170703 23:24:12.992">
+<suite source="C:\Users\Administrator\PycharmProjects\smd_regression\Tests\Tests_Simple_BP\Facebook\3_private_messages.tsv" name="3 Private Messages" id="s1">
+<test name="Customer sends PM with only text and agent replies" id="s1-t1">
+<kw type="setup" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Start work</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:24:17.613">Arguments: [ 'Start work' ]</msg>
+<kw name="Start work">
+<msg level="TRACE" timestamp="20170703 23:24:17.618">Arguments: [  ]</msg>
+<kw library="BuiltIn" name="Get Time">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${PREFIX}</var>
+</assign>
+<msg level="TRACE" timestamp="20170703 23:24:17.623">Arguments: [ 'epoch' ]</msg>
+<msg level="TRACE" timestamp="20170703 23:24:17.626">Return: 1499149457</msg>
+<msg level="INFO" timestamp="20170703 23:24:17.628">${PREFIX} = 1499149457</msg>
+<status endtime="20170703 23:24:17.629" starttime="20170703 23:24:17.620" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Set Suite Variable">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:24:17.633">Arguments: [ '${PREFIX}' ]</msg>
+<msg level="INFO" timestamp="20170703 23:24:17.637">${PREFIX} = 1499149457</msg>
+<msg level="TRACE" timestamp="20170703 23:24:17.638">Return: None</msg>
+<status endtime="20170703 23:24:17.639" starttime="20170703 23:24:17.631" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Start App</arg>
+<arg>AND</arg>
+<arg>Workspace.Do Login</arg>
+<arg>AND</arg>
+<arg>Workspace.Set Agent Status Ready</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:24:17.645">Arguments: [ 'Workspace.Start App' | 'AND' | 'Workspace.Do Login' | 'AND' | 'Workspace.Set Agent Status Ready' ]</msg>
+<kw library="Workspace" name="Start App">
+<msg level="TRACE" timestamp="20170703 23:24:17.651">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:24:22.500">PASS: WDE Window Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:24:22.501">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.StartScreen.buttons.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:24:22.501">Best Matches &lt;img src="../results/matches/2017-07-03_23-24-22.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:24:22.503">Matched with score: 0.999997496605
+[log] App.open [7880:run_wde.bat]</msg>
+<msg level="TRACE" timestamp="20170703 23:24:22.526">Return: None</msg>
+<status endtime="20170703 23:24:22.528" starttime="20170703 23:24:17.650" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Do Login">
+<msg level="TRACE" timestamp="20170703 23:24:22.536">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:24:26.293">PASS: Use recent workspace checkbox is unchecked</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:24:26.294">Source Image &lt;img src="../images/recent_place_unchecked.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:24:26.294">Best Matches &lt;img src="../results/matches/2017-07-03_23-24-22.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:24:26.295">Matched with score: 0.810648977757
+[log] CLICK on L(536,259)@S(0)[0,0 1364x768]
+[log] CLICK on L(596,456)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:24:26.300">Return: None</msg>
+<status endtime="20170703 23:24:26.301" starttime="20170703 23:24:22.534" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Set Agent Status Ready">
+<msg level="TRACE" timestamp="20170703 23:24:26.305">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:24:44.641">[log] CLICK on L(1100,20)@S(0)[0,0 1364x768]
+[log] CLICK on L(1123,51)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:24:44.644">Return: None</msg>
+<status endtime="20170703 23:24:44.652" starttime="20170703 23:24:26.304" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:24:44.653">Return: None</msg>
+<status endtime="20170703 23:24:44.655" starttime="20170703 23:24:17.640" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Pending Interactions">
+<msg level="TRACE" timestamp="20170703 23:24:44.660">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:26:32.128">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:26:32.129">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:26:32.129">Best Matches &lt;img src="../results/matches/2017-07-03_23-24-46.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:26:32.129">Matched with score: 0.999988734722
+[log] CLICK on L(1198,704)@S(0)[0,0 1364x768]
+[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:26:32.145">Return: None</msg>
+<status endtime="20170703 23:26:32.151" starttime="20170703 23:24:44.658" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:26:32.169">Return: None</msg>
+<status endtime="20170703 23:26:32.174" starttime="20170703 23:24:17.615" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:26:32.176">Return: None</msg>
+<status endtime="20170703 23:26:32.179" starttime="20170703 23:24:17.609" status="PASS"></status>
+</kw>
+<kw library="Facebook" name="Send Private Message To Page">
+<arguments>
+<arg>${page}</arg>
+<arg>Facebook - This is an automated private message with only text ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:26:32.221">Arguments: [ b'WDE-Automation-Local-1872103676390498' | 'Facebook - This is an automated private message with only text 1499149457' ]</msg>
+<msg level="DEBUG" timestamp="20170703 23:26:32.230">Initializing Selenium driver...</msg>
+<msg level="DEBUG" timestamp="20170703 23:26:52.133">Facebook Log in...</msg>
+<msg level="DEBUG" timestamp="20170703 23:26:56.788">Facebook: private message on page WDE-Automation-Local-1872103676390498 Facebook - This is an automated private message with only text 1499149457</msg>
+<msg level="TRACE" timestamp="20170703 23:27:04.196">Return: None</msg>
+<status endtime="20170703 23:27:04.199" starttime="20170703 23:26:32.186" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Interaction">
+<msg level="TRACE" timestamp="20170703 23:27:04.204">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:27:40.532">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:27:40.532">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:27:40.532">Best Matches &lt;img src="../results/matches/2017-07-03_23-27-22.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:27:40.533">Matched with score: 0.999988734722
+[log] CLICK on L(1197,709)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:27:40.576">Return: None</msg>
+<status endtime="20170703 23:27:40.577" starttime="20170703 23:27:04.201" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Verify Facebook Interaction Text">
+<msg level="TRACE" timestamp="20170703 23:27:40.586">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:27:43.937">PASS: Facebook interaction text appeared</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:27:43.938">Source Image &lt;img src="../images/Facebook.TextValidator.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:27:43.938">Best Matches &lt;img src="../results/matches/2017-07-03_23-27-43.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:27:43.938">Matched with score: 0.892033159733</msg>
+<msg level="TRACE" timestamp="20170703 23:27:43.971">Return: None</msg>
+<status endtime="20170703 23:27:43.975" starttime="20170703 23:27:40.584" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Enter Private Message Text">
+<arguments>
+<arg>This is an automated reply PM by agent. Text message recieved. ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:27:43.989">Arguments: [ 'This is an automated reply PM by agent. Text message recieved. 1499149457' ]</msg>
+<msg level="INFO" timestamp="20170703 23:27:54.786">[log] CLICK on L(330,488)@S(0)[0,0 1364x768]
+[log]  TYPE "This is an automated reply PM by agent. Text message recieved. 1499149457"</msg>
+<msg level="TRACE" timestamp="20170703 23:27:54.787">Return: None</msg>
+<status endtime="20170703 23:27:54.791" starttime="20170703 23:27:43.980" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Send Post">
+<msg level="TRACE" timestamp="20170703 23:27:54.813">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:02.462">[log] CLICK on L(403,538)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:02.465">Return: None</msg>
+<status endtime="20170703 23:28:02.466" starttime="20170703 23:27:54.812" status="PASS"></status>
+</kw>
+<kw type="teardown" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Mark Interaction Done</arg>
+<arg>AND</arg>
+<arg>Run</arg>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:28:02.473">Arguments: [ 'Workspace.Mark Interaction Done' | 'AND' | 'Run' | 'kill.bat' ]</msg>
+<kw library="Workspace" name="Mark Interaction Done">
+<msg level="TRACE" timestamp="20170703 23:28:02.477">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:09.962">[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:09.966">Return: None</msg>
+<status endtime="20170703 23:28:09.969" starttime="20170703 23:28:02.476" status="PASS"></status>
+</kw>
+<kw library="OperatingSystem" name="Run">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:28:09.975">Arguments: [ 'kill.bat' ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:10.456">Running command 'kill.bat 2&gt;&amp;1'.</msg>
+<msg level="TRACE" timestamp="20170703 23:28:10.900">Return: '\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;ECHO Shutting down WDE process \nShutting down WDE process\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM InteractionWorkspace.exe \nSUCCESS: The process "InteractionWorkspace.exe" with PID 5372 has been terminated.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM plugin-container.exe \nERROR: The process "plugin-container.exe" not found.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM firefox.exe \nERROR: The process "firefox.exe" not found.'</msg>
+<status endtime="20170703 23:28:10.902" starttime="20170703 23:28:09.973" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:28:10.903">Return: None</msg>
+<status endtime="20170703 23:28:10.904" starttime="20170703 23:28:02.469" status="PASS"></status>
+</kw>
+<status critical="yes" endtime="20170703 23:28:10.906" starttime="20170703 23:24:17.603" status="PASS"></status>
+</test>
+<test name="Customer sends PM with image and agent replies" id="s1-t2">
+<kw type="setup" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Start work</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:28:10.919">Arguments: [ 'Start work' ]</msg>
+<kw name="Start work">
+<msg level="TRACE" timestamp="20170703 23:28:10.922">Arguments: [  ]</msg>
+<kw library="BuiltIn" name="Get Time">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${PREFIX}</var>
+</assign>
+<msg level="TRACE" timestamp="20170703 23:28:10.926">Arguments: [ 'epoch' ]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:10.929">Return: 1499149690</msg>
+<msg level="INFO" timestamp="20170703 23:28:10.930">${PREFIX} = 1499149690</msg>
+<status endtime="20170703 23:28:10.931" starttime="20170703 23:28:10.924" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Set Suite Variable">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:28:10.935">Arguments: [ '${PREFIX}' ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:10.937">${PREFIX} = 1499149690</msg>
+<msg level="TRACE" timestamp="20170703 23:28:10.938">Return: None</msg>
+<status endtime="20170703 23:28:10.939" starttime="20170703 23:28:10.933" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Start App</arg>
+<arg>AND</arg>
+<arg>Workspace.Do Login</arg>
+<arg>AND</arg>
+<arg>Workspace.Set Agent Status Ready</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:28:10.944">Arguments: [ 'Workspace.Start App' | 'AND' | 'Workspace.Do Login' | 'AND' | 'Workspace.Set Agent Status Ready' ]</msg>
+<kw library="Workspace" name="Start App">
+<msg level="TRACE" timestamp="20170703 23:28:10.948">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:13.203">PASS: WDE Window Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:28:13.204">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.StartScreen.buttons.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:28:13.205">Best Matches &lt;img src="../results/matches/2017-07-03_23-28-12.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:28:13.205">Matched with score: 0.999997317791
+[log] App.open [8172:run_wde.bat]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:13.208">Return: None</msg>
+<status endtime="20170703 23:28:13.209" starttime="20170703 23:28:10.947" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Do Login">
+<msg level="TRACE" timestamp="20170703 23:28:13.213">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:19.623">PASS: Use recent workspace checkbox is unchecked</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:28:19.624">Source Image &lt;img src="../images/recent_place_unchecked.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:28:19.624">Best Matches &lt;img src="../results/matches/2017-07-03_23-28-13.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:28:19.625">Matched with score: 0.810636162758
+[log] CLICK on L(536,259)@S(0)[0,0 1364x768]
+[log] CLICK on L(596,456)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:19.629">Return: None</msg>
+<status endtime="20170703 23:28:19.630" starttime="20170703 23:28:13.212" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Set Agent Status Ready">
+<msg level="TRACE" timestamp="20170703 23:28:19.635">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:28:36.307">[log] CLICK on L(1100,20)@S(0)[0,0 1364x768]
+[log] CLICK on L(1123,51)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:28:36.332">Return: None</msg>
+<status endtime="20170703 23:28:36.334" starttime="20170703 23:28:19.633" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:28:36.338">Return: None</msg>
+<status endtime="20170703 23:28:36.338" starttime="20170703 23:28:10.940" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Pending Interactions">
+<msg level="TRACE" timestamp="20170703 23:28:36.342">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:30:22.888">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:30:22.889">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:30:22.889">Best Matches &lt;img src="../results/matches/2017-07-03_23-28-37.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:30:22.889">Matched with score: 0.999988734722
+[log] CLICK on L(1198,704)@S(0)[0,0 1364x768]
+[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:30:22.899">Return: None</msg>
+<status endtime="20170703 23:30:22.900" starttime="20170703 23:28:36.341" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:30:22.902">Return: None</msg>
+<status endtime="20170703 23:30:22.903" starttime="20170703 23:28:10.920" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:30:22.909">Return: None</msg>
+<status endtime="20170703 23:30:22.911" starttime="20170703 23:28:10.916" status="PASS"></status>
+</kw>
+<kw library="Facebook" name="Send Image Private Message">
+<arguments>
+<arg>${page}</arg>
+<arg>test.png</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:30:22.922">Arguments: [ b'WDE-Automation-Local-1872103676390498' | 'test.png' ]</msg>
+<msg level="DEBUG" timestamp="20170703 23:30:22.925">Initializing Selenium driver...</msg>
+<msg level="DEBUG" timestamp="20170703 23:30:31.347">Facebook Log in...</msg>
+<msg level="DEBUG" timestamp="20170703 23:30:35.129">Facebook: private message on page WDE-Automation-Local-1872103676390498 test.png</msg>
+<msg level="INFO" timestamp="20170703 23:30:49.128">[log] CLICK on L(266,509)@S(0)[0,0 1364x768]
+[log]  TYPE "C:\Users\Administrator\PycharmProjects\smd_regression\images\test.png"
+[log]  TYPE "#ENTER."</msg>
+<msg level="TRACE" timestamp="20170703 23:30:49.129">Return: None</msg>
+<status endtime="20170703 23:30:49.131" starttime="20170703 23:30:22.918" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Interaction">
+<msg level="TRACE" timestamp="20170703 23:30:49.134">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:12.857">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:12.857">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:12.857">Best Matches &lt;img src="../results/matches/2017-07-03_23-31-10.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:31:12.858">Matched with score: 0.999988734722
+[log] CLICK on L(1198,704)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:12.866">Return: None</msg>
+<status endtime="20170703 23:31:12.867" starttime="20170703 23:30:49.133" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Enter Private Message Text">
+<arguments>
+<arg>This is an automated reply PM by agent. Image message recieved. ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:12.926">Arguments: [ 'This is an automated reply PM by agent. Image message recieved. 1499149690' ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:23.901">[log] CLICK on L(330,488)@S(0)[0,0 1364x768]
+[log]  TYPE "This is an automated reply PM by agent. Image message recieved. 1499149690"</msg>
+<msg level="TRACE" timestamp="20170703 23:31:23.902">Return: None</msg>
+<status endtime="20170703 23:31:23.903" starttime="20170703 23:31:12.923" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Send Post">
+<msg level="TRACE" timestamp="20170703 23:31:23.912">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:31.281">[log] CLICK on L(403,538)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:31.283">Return: None</msg>
+<status endtime="20170703 23:31:31.284" starttime="20170703 23:31:23.910" status="PASS"></status>
+</kw>
+<kw type="teardown" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Mark Interaction Done</arg>
+<arg>AND</arg>
+<arg>Run</arg>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:31.306">Arguments: [ 'Workspace.Mark Interaction Done' | 'AND' | 'Run' | 'kill.bat' ]</msg>
+<kw library="Workspace" name="Mark Interaction Done">
+<msg level="TRACE" timestamp="20170703 23:31:31.310">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:38.785">[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:38.788">Return: None</msg>
+<status endtime="20170703 23:31:38.789" starttime="20170703 23:31:31.309" status="PASS"></status>
+</kw>
+<kw library="OperatingSystem" name="Run">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:38.794">Arguments: [ 'kill.bat' ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:38.808">Running command 'kill.bat 2&gt;&amp;1'.</msg>
+<msg level="TRACE" timestamp="20170703 23:31:39.285">Return: '\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;ECHO Shutting down WDE process \nShutting down WDE process\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM InteractionWorkspace.exe \nSUCCESS: The process "InteractionWorkspace.exe" with PID 8176 has been terminated.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM plugin-container.exe \nERROR: The process "plugin-container.exe" not found.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM firefox.exe \nERROR: The process "firefox.exe" not found.'</msg>
+<status endtime="20170703 23:31:39.287" starttime="20170703 23:31:38.792" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:31:39.288">Return: None</msg>
+<status endtime="20170703 23:31:39.289" starttime="20170703 23:31:31.302" status="PASS"></status>
+</kw>
+<status critical="yes" endtime="20170703 23:31:39.290" starttime="20170703 23:28:10.911" status="PASS"></status>
+</test>
+<test name="Customer sends PM with link and agent replies" id="s1-t3">
+<kw type="setup" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Start work</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:39.357">Arguments: [ 'Start work' ]</msg>
+<kw name="Start work">
+<msg level="TRACE" timestamp="20170703 23:31:39.377">Arguments: [  ]</msg>
+<kw library="BuiltIn" name="Get Time">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${PREFIX}</var>
+</assign>
+<msg level="TRACE" timestamp="20170703 23:31:39.386">Arguments: [ 'epoch' ]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:39.388">Return: 1499149899</msg>
+<msg level="INFO" timestamp="20170703 23:31:39.390">${PREFIX} = 1499149899</msg>
+<status endtime="20170703 23:31:39.390" starttime="20170703 23:31:39.384" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Set Suite Variable">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:39.394">Arguments: [ '${PREFIX}' ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:39.402">${PREFIX} = 1499149899</msg>
+<msg level="TRACE" timestamp="20170703 23:31:39.403">Return: None</msg>
+<status endtime="20170703 23:31:39.405" starttime="20170703 23:31:39.392" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Start App</arg>
+<arg>AND</arg>
+<arg>Workspace.Do Login</arg>
+<arg>AND</arg>
+<arg>Workspace.Set Agent Status Ready</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:31:39.409">Arguments: [ 'Workspace.Start App' | 'AND' | 'Workspace.Do Login' | 'AND' | 'Workspace.Set Agent Status Ready' ]</msg>
+<kw library="Workspace" name="Start App">
+<msg level="TRACE" timestamp="20170703 23:31:39.412">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:39.477">PASS: WDE Window Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:39.477">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.StartScreen.buttons.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:39.477">Best Matches &lt;img src="../results/matches/2017-07-03_23-31-39.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:31:39.477">Matched with score: 0.755302250385
+[log] App.open [5532:run_wde.bat]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:39.480">Return: None</msg>
+<status endtime="20170703 23:31:39.481" starttime="20170703 23:31:39.412" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Do Login">
+<msg level="TRACE" timestamp="20170703 23:31:39.483">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:31:45.357">PASS: Use recent workspace checkbox is unchecked</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:45.369">Source Image &lt;img src="../images/recent_place_unchecked.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:31:45.369">Best Matches &lt;img src="../results/matches/2017-07-03_23-31-42.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:31:45.369">Matched with score: 0.810648977757
+[log] CLICK on L(536,259)@S(0)[0,0 1364x768]
+[log] CLICK on L(596,456)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:31:45.373">Return: None</msg>
+<status endtime="20170703 23:31:45.374" starttime="20170703 23:31:39.483" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Set Agent Status Ready">
+<msg level="TRACE" timestamp="20170703 23:31:45.380">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:32:02.706">[log] CLICK on L(1100,20)@S(0)[0,0 1364x768]
+[log] CLICK on L(1123,51)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:32:02.711">Return: None</msg>
+<status endtime="20170703 23:32:02.712" starttime="20170703 23:31:45.376" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:32:02.713">Return: None</msg>
+<status endtime="20170703 23:32:02.713" starttime="20170703 23:31:39.406" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Pending Interactions">
+<msg level="TRACE" timestamp="20170703 23:32:02.737">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:33:49.647">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:33:49.648">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:33:49.648">Best Matches &lt;img src="../results/matches/2017-07-03_23-32-04.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:33:49.648">Matched with score: 0.999988734722
+[log] CLICK on L(1198,704)@S(0)[0,0 1364x768]
+[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:33:49.651">Return: None</msg>
+<status endtime="20170703 23:33:49.652" starttime="20170703 23:32:02.731" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:33:49.654">Return: None</msg>
+<status endtime="20170703 23:33:49.655" starttime="20170703 23:31:39.374" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:33:49.656">Return: None</msg>
+<status endtime="20170703 23:33:49.657" starttime="20170703 23:31:39.309" status="PASS"></status>
+</kw>
+<kw library="Facebook" name="Send Private Message To Page">
+<arguments>
+<arg>${page}</arg>
+<arg>Facebook - This is an automated private message with link https://www.google.com ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:33:49.668">Arguments: [ b'WDE-Automation-Local-1872103676390498' | 'Facebook - This is an automated private message with link https://www.google.com 1499149899' ]</msg>
+<msg level="DEBUG" timestamp="20170703 23:33:49.671">Initializing Selenium driver...</msg>
+<msg level="DEBUG" timestamp="20170703 23:33:53.620">Facebook Log in...</msg>
+<msg level="DEBUG" timestamp="20170703 23:33:57.444">Facebook: private message on page WDE-Automation-Local-1872103676390498 Facebook - This is an automated private message with link https://www.google.com 1499149899</msg>
+<msg level="TRACE" timestamp="20170703 23:34:00.557">Return: None</msg>
+<status endtime="20170703 23:34:00.559" starttime="20170703 23:33:49.659" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Interaction">
+<msg level="TRACE" timestamp="20170703 23:34:00.562">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:34:40.118">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:34:40.119">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:34:40.119">Best Matches &lt;img src="../results/matches/2017-07-03_23-34-22.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:34:40.119">Matched with score: 0.975882589817
+[log] CLICK on L(1197,709)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:34:40.136">Return: None</msg>
+<status endtime="20170703 23:34:40.137" starttime="20170703 23:34:00.561" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Verify Facebook Interaction Text">
+<msg level="TRACE" timestamp="20170703 23:34:40.153">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:34:42.607">PASS: Facebook interaction text appeared</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:34:42.609">Source Image &lt;img src="../images/Facebook.TextValidator.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:34:42.609">Best Matches &lt;img src="../results/matches/2017-07-03_23-34-42.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:34:42.609">Matched with score: 0.892033159733</msg>
+<msg level="TRACE" timestamp="20170703 23:34:42.619">Return: None</msg>
+<status endtime="20170703 23:34:42.620" starttime="20170703 23:34:40.152" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Enter Private Message Text">
+<arguments>
+<arg>This is an automated reply PM by agent. Link message recieved. ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:34:42.627">Arguments: [ 'This is an automated reply PM by agent. Link message recieved. 1499149899' ]</msg>
+<msg level="INFO" timestamp="20170703 23:34:53.466">[log] CLICK on L(330,488)@S(0)[0,0 1364x768]
+[log]  TYPE "This is an automated reply PM by agent. Link message recieved. 1499149899"</msg>
+<msg level="TRACE" timestamp="20170703 23:34:53.468">Return: None</msg>
+<status endtime="20170703 23:34:53.469" starttime="20170703 23:34:42.623" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Send Post">
+<msg level="TRACE" timestamp="20170703 23:34:53.472">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:00.883">[log] CLICK on L(403,538)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:00.885">Return: None</msg>
+<status endtime="20170703 23:35:00.886" starttime="20170703 23:34:53.471" status="PASS"></status>
+</kw>
+<kw type="teardown" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Mark Interaction Done</arg>
+<arg>AND</arg>
+<arg>Run</arg>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:35:00.897">Arguments: [ 'Workspace.Mark Interaction Done' | 'AND' | 'Run' | 'kill.bat' ]</msg>
+<kw library="Workspace" name="Mark Interaction Done">
+<msg level="TRACE" timestamp="20170703 23:35:00.902">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:08.371">[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:08.373">Return: None</msg>
+<status endtime="20170703 23:35:08.385" starttime="20170703 23:35:00.901" status="PASS"></status>
+</kw>
+<kw library="OperatingSystem" name="Run">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:35:08.394">Arguments: [ 'kill.bat' ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:08.403">Running command 'kill.bat 2&gt;&amp;1'.</msg>
+<msg level="TRACE" timestamp="20170703 23:35:08.726">Return: '\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;ECHO Shutting down WDE process \nShutting down WDE process\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM InteractionWorkspace.exe \nSUCCESS: The process "InteractionWorkspace.exe" with PID 6480 has been terminated.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM plugin-container.exe \nERROR: The process "plugin-container.exe" not found.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM firefox.exe \nERROR: The process "firefox.exe" not found.'</msg>
+<status endtime="20170703 23:35:08.729" starttime="20170703 23:35:08.387" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:35:08.731">Return: None</msg>
+<status endtime="20170703 23:35:08.732" starttime="20170703 23:35:00.894" status="PASS"></status>
+</kw>
+<status critical="yes" endtime="20170703 23:35:08.733" starttime="20170703 23:31:39.303" status="PASS"></status>
+</test>
+<test name="Customer sends PM with emojis and agent replies" id="s1-t4">
+<kw type="setup" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Start work</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:35:08.742">Arguments: [ 'Start work' ]</msg>
+<kw name="Start work">
+<msg level="TRACE" timestamp="20170703 23:35:08.745">Arguments: [  ]</msg>
+<kw library="BuiltIn" name="Get Time">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${PREFIX}</var>
+</assign>
+<msg level="TRACE" timestamp="20170703 23:35:08.748">Arguments: [ 'epoch' ]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:08.750">Return: 1499150108</msg>
+<msg level="INFO" timestamp="20170703 23:35:08.751">${PREFIX} = 1499150108</msg>
+<status endtime="20170703 23:35:08.752" starttime="20170703 23:35:08.746" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Set Suite Variable">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:35:08.754">Arguments: [ '${PREFIX}' ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:08.756">${PREFIX} = 1499150108</msg>
+<msg level="TRACE" timestamp="20170703 23:35:08.757">Return: None</msg>
+<status endtime="20170703 23:35:08.757" starttime="20170703 23:35:08.753" status="PASS"></status>
+</kw>
+<kw library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Start App</arg>
+<arg>AND</arg>
+<arg>Workspace.Do Login</arg>
+<arg>AND</arg>
+<arg>Workspace.Set Agent Status Ready</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:35:08.761">Arguments: [ 'Workspace.Start App' | 'AND' | 'Workspace.Do Login' | 'AND' | 'Workspace.Set Agent Status Ready' ]</msg>
+<kw library="Workspace" name="Start App">
+<msg level="TRACE" timestamp="20170703 23:35:08.764">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:10.783">PASS: WDE Window Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:35:10.784">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.StartScreen.buttons.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:35:10.785">Best Matches &lt;img src="../results/matches/2017-07-03_23-35-10.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:35:10.785">Matched with score: 0.999997973442
+[log] App.open [4520:run_wde.bat]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:10.789">Return: None</msg>
+<status endtime="20170703 23:35:10.791" starttime="20170703 23:35:08.763" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Do Login">
+<msg level="TRACE" timestamp="20170703 23:35:10.794">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:13.917">PASS: Use recent workspace checkbox is unchecked</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:35:13.917">Source Image &lt;img src="../images/recent_place_unchecked.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:35:13.917">Best Matches &lt;img src="../results/matches/2017-07-03_23-35-10.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:35:13.918">Matched with score: 0.810636162758
+[log] CLICK on L(536,259)@S(0)[0,0 1364x768]
+[log] CLICK on L(596,456)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:13.921">Return: None</msg>
+<status endtime="20170703 23:35:13.922" starttime="20170703 23:35:10.793" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Set Agent Status Ready">
+<msg level="TRACE" timestamp="20170703 23:35:13.924">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:35:30.640">[log] CLICK on L(1100,20)@S(0)[0,0 1364x768]
+[log] CLICK on L(1123,51)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:35:30.643">Return: None</msg>
+<status endtime="20170703 23:35:30.647" starttime="20170703 23:35:13.923" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:35:30.647">Return: None</msg>
+<status endtime="20170703 23:35:30.650" starttime="20170703 23:35:08.759" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Pending Interactions">
+<msg level="TRACE" timestamp="20170703 23:35:30.653">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:37:17.708">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:37:17.709">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:37:17.709">Best Matches &lt;img src="../results/matches/2017-07-03_23-35-32.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:37:17.709">Matched with score: 0.999988734722
+[log] CLICK on L(1198,704)@S(0)[0,0 1364x768]
+[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:37:17.712">Return: None</msg>
+<status endtime="20170703 23:37:17.713" starttime="20170703 23:35:30.652" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:37:17.714">Return: None</msg>
+<status endtime="20170703 23:37:17.715" starttime="20170703 23:35:08.743" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:37:17.715">Return: None</msg>
+<status endtime="20170703 23:37:17.716" starttime="20170703 23:35:08.740" status="PASS"></status>
+</kw>
+<kw library="Facebook" name="Send Private Message To Page">
+<arguments>
+<arg>${page}</arg>
+<arg>Facebook - This is an automated private message with emojis :-) :-D :-( ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:37:17.721">Arguments: [ b'WDE-Automation-Local-1872103676390498' | 'Facebook - This is an automated private message with emojis :-) :-D :-( 1499150108' ]</msg>
+<msg level="DEBUG" timestamp="20170703 23:37:17.723">Initializing Selenium driver...</msg>
+<msg level="DEBUG" timestamp="20170703 23:37:21.359">Facebook Log in...</msg>
+<msg level="DEBUG" timestamp="20170703 23:37:25.159">Facebook: private message on page WDE-Automation-Local-1872103676390498 Facebook - This is an automated private message with emojis :-) :-D :-( 1499150108</msg>
+<msg level="TRACE" timestamp="20170703 23:37:27.975">Return: None</msg>
+<status endtime="20170703 23:37:27.976" starttime="20170703 23:37:17.718" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Accept Interaction">
+<msg level="TRACE" timestamp="20170703 23:37:27.979">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:08.298">PASS: Incoming Interaction Appeared.</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:38:08.299">Source Image &lt;img src="../images/C:\Users\Administrator\PycharmProjects\smd_regression\images\WDE.IncomingInteractionReject.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:38:08.299">Best Matches &lt;img src="../results/matches/2017-07-03_23-37-50.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:38:08.299">Matched with score: 0.999988734722
+[log] CLICK on L(1197,709)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:38:08.304">Return: None</msg>
+<status endtime="20170703 23:38:08.305" starttime="20170703 23:37:27.978" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Verify Facebook Interaction Text">
+<msg level="TRACE" timestamp="20170703 23:38:08.308">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:13.606">PASS: Facebook interaction text appeared</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:38:13.607">Source Image &lt;img src="../images/Facebook.TextValidator.png" /&gt;</msg>
+<msg level="INFO" html="yes" timestamp="20170703 23:38:13.608">Best Matches &lt;img src="../results/matches/2017-07-03_23-38-13.png" /&gt;</msg>
+<msg level="INFO" timestamp="20170703 23:38:13.608">Matched with score: 0.892033159733</msg>
+<msg level="TRACE" timestamp="20170703 23:38:13.611">Return: None</msg>
+<status endtime="20170703 23:38:13.612" starttime="20170703 23:38:08.307" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Enter Private Message Text">
+<arguments>
+<arg>This is an automated reply PM by agent. Emojis message recieved. ${PREFIX}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:38:13.617">Arguments: [ 'This is an automated reply PM by agent. Emojis message recieved. 1499150108' ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:24.355">[log] CLICK on L(330,488)@S(0)[0,0 1364x768]
+[log]  TYPE "This is an automated reply PM by agent. Emojis message recieved. 1499150108"</msg>
+<msg level="TRACE" timestamp="20170703 23:38:24.356">Return: None</msg>
+<status endtime="20170703 23:38:24.357" starttime="20170703 23:38:13.615" status="PASS"></status>
+</kw>
+<kw library="Workspace" name="Send Post">
+<msg level="TRACE" timestamp="20170703 23:38:24.360">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:31.807">[log] CLICK on L(403,538)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:38:31.809">Return: None</msg>
+<status endtime="20170703 23:38:31.810" starttime="20170703 23:38:24.359" status="PASS"></status>
+</kw>
+<kw type="teardown" library="BuiltIn" name="Run Keywords">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>Workspace.Mark Interaction Done</arg>
+<arg>AND</arg>
+<arg>Run</arg>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:38:31.816">Arguments: [ 'Workspace.Mark Interaction Done' | 'AND' | 'Run' | 'kill.bat' ]</msg>
+<kw library="Workspace" name="Mark Interaction Done">
+<msg level="TRACE" timestamp="20170703 23:38:31.821">Arguments: [  ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:39.288">[log] CLICK on L(320,63)@S(0)[0,0 1364x768]</msg>
+<msg level="TRACE" timestamp="20170703 23:38:39.289">Return: None</msg>
+<status endtime="20170703 23:38:39.290" starttime="20170703 23:38:31.821" status="PASS"></status>
+</kw>
+<kw library="OperatingSystem" name="Run">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>kill.bat</arg>
+</arguments>
+<msg level="TRACE" timestamp="20170703 23:38:39.293">Arguments: [ 'kill.bat' ]</msg>
+<msg level="INFO" timestamp="20170703 23:38:39.313">Running command 'kill.bat 2&gt;&amp;1'.</msg>
+<msg level="TRACE" timestamp="20170703 23:38:39.686">Return: '\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;ECHO Shutting down WDE process \nShutting down WDE process\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM InteractionWorkspace.exe \nSUCCESS: The process "InteractionWorkspace.exe" with PID 7696 has been terminated.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM plugin-container.exe \nERROR: The process "plugin-container.exe" not found.\n\nC:\\Users\\Administrator\\PycharmProjects\\smd_regression&gt;taskkill /F /IM firefox.exe \nERROR: The process "firefox.exe" not found.'</msg>
+<status endtime="20170703 23:38:39.688" starttime="20170703 23:38:39.292" status="PASS"></status>
+</kw>
+<msg level="TRACE" timestamp="20170703 23:38:39.688">Return: None</msg>
+<status endtime="20170703 23:38:39.689" starttime="20170703 23:38:31.814" status="PASS"></status>
+</kw>
+<status critical="yes" endtime="20170703 23:38:39.691" starttime="20170703 23:35:08.737" status="PASS"></status>
+</test>
+<status endtime="20170703 23:38:39.708" starttime="20170703 23:24:13.011" status="PASS"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0">Critical Tests</stat>
+<stat pass="4" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="4" fail="0" name="3 Private Messages" id="s1">3 Private Messages</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

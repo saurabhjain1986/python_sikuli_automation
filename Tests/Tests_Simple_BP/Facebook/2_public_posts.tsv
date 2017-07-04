@@ -1,0 +1,205 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem	
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Keywords ***
+Customer makes text only post
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting this at ${PREFIX} and need some assistance!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}	
+
+Customer makes post with hyperlink
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting https://www.google.com/ at ${PREFIX}
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with emojis
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting :) ;) at ${PREFIX} and need your help with that!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with image
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	${POST_ID} =	Facebook.Publish Photo As Customer	${page}	Facebook- I'm posting image at ${PREFIX}	StaticImage.png
+	Set Suite Variable	${POST_ID}
+
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+
+
+*** Test Cases ***
+Customer make new post with only text
+	[Tags]	SMD-3779
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with link
+	[Tags]	SMD-3781
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with emojis
+	[Tags]	SMD-3782
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with image
+	[Tags]	SMD-3780
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Accept Interaction
+	Workspace.Verify Static Image
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with only text and agent reply
+	[Tags]	SMD-3779
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-1 by agent with only text ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Exist	${POST_ID}	Facebook- This is an automated comment level-1 by agent with only text ${PREFIX}
+	Facebook.Post Level2 Comment As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by agent with only text ${PREFIX}	Facebook- This is an automated comment level-2 by customer with only text ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with link and agent reply
+	[Tags]	SMD-3781
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-1 by agent with link https://www.google.com ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Exist	${POST_ID}	Facebook- This is an automated comment level-1 by agent with link https://www.google.com ${PREFIX}
+	Facebook.Post Level2 Comment As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by agent with link https://www.google.com ${PREFIX}	Facebook- This is an automated comment level-2 by customer with link https://www.google.com ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with emojis and agent reply
+	[Tags]	SMD-3782
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Comment Button
+	Workspace.Enter Comment Text	${PREFIX} Facebook- This is an automated comment level-1 by agent with emojis :-) :-D :-(
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Exist	${POST_ID}	${PREFIX} Facebook- This is an automated comment level-1 by agent with emojis
+	Facebook.Post Level2 Comment As Customer	${POST_ID}	${PREFIX} Facebook- This is an automated comment level-1 by agent with emojis	Facebook- This is an automated comment level-2 by customer with emojis :-) :-D :-( ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post with image and agent reply
+	[Tags]	SMD-3780
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Accept Interaction
+	Workspace.Verify Static Image
+	Set Suite Variable	${COMMENT_TEXT}	Automatic comment with only text created at ${PREFIX}
+	Workspace.Click Comment Button
+	Workspace.Enter Comment Text	${COMMENT_TEXT}
+	Workspace.Send Post
+	Sleep	2m	Wait for agent comment to be published on Facebook
+	${commentExists} =	Facebook.Is Comment Exist	${POST_ID}	${COMMENT_TEXT}
+	Should Be True	${commentExists}
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent deletes customer post with only text
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Delete Facebook Inbound Interaction
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent deletes customer post with link
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Delete Facebook Inbound Interaction
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent deletes customer post with emojis
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Delete Facebook Inbound Interaction
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent deletes customer post with image
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Accept Interaction
+	Workspace.Verify Static Image
+	Workspace.Delete Facebook Inbound Interaction
+	Facebook.Is Post Exist On Page	Facebook- I'm posting image at ${PREFIX}	${page}
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent likes customer post with only text
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Like Facebook Inbound Interaction As Agent
+	Sleep	2m	Wait for agent like to be published on Facebook
+	${likesCount} =	Facebook.Get Post Likes Count	${POST_ID}
+	Should Be Equal As Strings	${likesCount}	1
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent likes customer post with image
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Accept Interaction
+	Workspace.Verify Static Image
+	Workspace.Like Facebook Inbound Interaction As Agent
+	Sleep	2m	Wait for agent like to be published on Facebook
+	${likesCount} =	Facebook.Get Post Likes Count	${POST_ID}
+	Should Be Equal As Strings	${likesCount}	1
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent likes customer post with link
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Like Facebook Inbound Interaction As Agent
+	Sleep	2m	Wait for agent like to be published on Facebook
+	${likesCount} =	Facebook.Get Post Likes Count	${POST_ID}
+	Should Be Equal As Strings	${likesCount}	1
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Agent likes customer post with Emojis
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Like Facebook Inbound Interaction As Agent
+	Sleep	2m	Wait for agent like to be published on Facebook
+	${likesCount} =	Facebook.Get Post Likes Count	${POST_ID}
+	Should Be Equal As Strings	${likesCount}	1
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat

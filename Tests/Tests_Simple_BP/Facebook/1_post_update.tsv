@@ -1,0 +1,67 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Suite Setup	Start work	
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Test Cases ***
+Post update in Facebook with only text
+	[Tags]	SMD-3744
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Automated post with only text created at ${PREFIX}
+	Start New Facebook Outbound Interaction
+	Workspace.Select Facebook Account	application page
+	Workspace.Type Post	${POST_TEXT}
+	Workspace.Send Post
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+
+Post update in Facebook with image
+	[Tags]	SMD-3745
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Automated post with image created at ${PREFIX}
+	Start New Facebook Outbound Interaction
+	Workspace.Select Facebook Account	application page
+	Workspace.Type Post	${POST_TEXT}
+	Workspace.Attach Image	test.png
+	Workspace.Send Post
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+
+Post update in Facebook with link
+	[Tags]	SMD-3746
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Automated post with link: https://www.google.com/ created at ${PREFIX}
+	Start New Facebook Outbound Interaction
+	Workspace.Select Facebook Account	application page
+	Workspace.Type Post	${POST_TEXT}
+	Workspace.Send Post
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+
+Post update in Facebook with Emojis
+	[Tags]	SMD-3747
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Automated post with emojis: :) ;) created at ${PREFIX}
+	Start New Facebook Outbound Interaction
+	Workspace.Select Facebook Account	application page
+	Workspace.Type Post	${POST_TEXT}
+	Workspace.Send Post
+	Facebook.Is Post Exist On Page	${POST_TEXT}	${page}
+
+*** Keywords ***
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Accept Pending Interactions
+
+Start New Facebook Outbound Interaction
+	Run Keywords	Workspace.Open Main Menu	AND	Workspace.Open Post Update Dropdown	AND	Workspace.Open Facebook Outbound Interaction
+
+

@@ -1,0 +1,77 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Variables	facebook_helper.py
+Variables	facebook_config.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+${Comment_Id}
+
+*** Keywords ***
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+
+Customer send new post
+	[Arguments]	${POST_TEXT}
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer send new post with image
+	[Arguments]	${POST_TEXT}	${image_name}
+	${POST_ID} =	Facebook.Publish Photo As Customer	${page}	${POST_TEXT}	${image_name}
+	Set Suite Variable	${POST_ID}
+
+Test Customer make new post agent comment from my history
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new post with image	Facebook- Hello, OFA! How are you? ${with_option} ${PREFIX}	StaticImage.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new post	Facebook- Hello, OFA! How are you? ${with_option} ${PREFIX}
+	Agent receive and comment from my history	${with_option}
+
+Agent receive and comment from my history
+	[Arguments]	${with_option}
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Mark Interaction Done
+	Workspace.Agent Navigate To My History
+	Workspace.Agent Open Last Interaction From History
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Comment Button My History
+	Workspace.Enter Comment Text	Facebook- We are doing good, as usual ${PREFIX} ${with_option}
+	Workspace.Send Post My History
+	Workspace.Agent Close Workbin
+	Facebook.Is Comment Exist	${POST_ID}	Facebook- We are doing good, as usual ${PREFIX}
+
+
+*** Test Cases ***
+
+Customer make new post with only text and agent comment from my history
+	[Tags]	SMD-4100
+	[Setup]	Start work
+	Test Customer make new post agent comment from my history	with only text
+	[Teardown]	Run	kill.bat
+
+Customer make new post with image and agent comment from my history
+	[Tags]	SMD-4101
+	[Setup]	Start work
+	Test Customer make new post agent comment from my history	with image
+	[Teardown]	Run	kill.bat
+
+Customer make new post with link and agent comment from my history
+	[Tags]	SMD-4102
+	[Setup]	Start work
+	Test Customer make new post agent comment from my history	with link : https://www.google.com
+	[Teardown]	Run	kill.bat
+
+Customer make new post with emojis and agent comment from my history
+	[Tags]	SMD-4103
+	[Setup]	Start work
+	Test Customer make new post agent comment from my history	with emojis :-) :-D :-(
+	[Teardown]	Run	kill.bat

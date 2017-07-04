@@ -1,0 +1,65 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Suite Setup	Start work
+Suite Teardown	Run	kill.bat
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Test Cases ***
+Customer make new tweet with only text and agent mark favorite
+	[Tags]	SMD-3928
+	[Documentation]	TW: Public Tweet: Customer send new tweet with text only - Agent mark favorite
+	Test Customer make new tweet agent favorite	with only text
+
+Customer make new tweet with image and agent mark favorite
+	[Tags]	SMD-3929
+	[Documentation]	TW: Public Tweet: Customer send new tweet with image - Agent mark favorite
+	Test Customer make new tweet agent favorite	with image
+
+Customer make new tweet with link and agent mark favorite
+	[Tags]	SMD-3930
+	[Documentation]	TW: Public Tweet: Customer send new tweet with link - Agent mark favorite
+	Test Customer make new tweet agent favorite	with link : https://www.google.com
+
+Customer make new tweet with emojis and agent mark favorite
+	[Tags]	SMD-3931
+	[Documentation]	TW: Public Tweet: Customer send new tweet with emojis - Agent mark favorite
+	Test Customer make new tweet agent favorite	with emojis :-) :-D :-(
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Test Customer make new tweet agent favorite
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- Hello, OFA. We love your innovation. ${global_id} ${with_option}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- Hello, OFA. We love your innovation. ${global_id} ${with_option}
+	Agent receive and mark favorite
+
+Customer send new tweet
+	[Arguments]	${tweet_text}
+	Twitter.Customer Post Tweet	@${brand_mention} ${tweet_text}
+
+Customer send new tweet with image
+	[Arguments]	${tweet_text}	${image_name}
+	Twitter.Customer Post Tweet With Image	@${brand_mention} ${tweet_text}	${image_name}
+
+Agent receive and mark favorite
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Favorite
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Favorite Agent	@${brand_mention} Twitter- Hello, OFA. We love your innovation. ${global_id}

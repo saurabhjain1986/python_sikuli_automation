@@ -1,0 +1,144 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Keywords ***
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+
+*** Test Cases ***
+Remove Visibility due to lack of hiding comments in Facebook
+	[Tags]	SMD-3927
+	[Setup]	Start work
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting :) ;) at ${PREFIX} and need your help with that!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	${result} =	Workspace.Verify Custom Element	WDE.Facebook.VisibilityOption.png	10
+	Should Be Equal	${result}	${false}
+	[Teardown]	Run	kill.bat
+
+FB: No 'Delete' and 'Like' options available for incoming comments on events
+	[Tags]	SMD-3778
+	[Setup]	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with only text ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Verify Custom Element	WDE.Interactions.Inbound.Facebook.Actions.Delete.png	10
+	Workspace.Verify Custom Element	WDE.Interactions.Inbound.Facebook.Actions.Like.png	10
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+Facebook: Facebook Comment Reply wrong behavior with Events
+	[Tags]	SMD-3567
+	[Setup]	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with only text ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment level-2 by agent ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+Facebook private message: link to image/video in the interaction window does not open file
+	[Tags]	SMD-3523
+	[Setup]	Start work
+	Facebook.Send Image Private Message	${page}	test.png
+	Workspace.Accept Interaction
+	Workspace.Click Attachment Link Facebook
+	Workspace.Mark Interaction Done
+	Workspace.Verify Custom Element	test.png	10
+	[Teardown]	Run	kill.bat
+
+WDE: Clicking on post with plain text and link with preview will open the website link instead of facebook post page
+	[Tags]	SMD-3591
+	[Setup]	Start work
+	Facebook.Send Image Private Message	${page}	test.png
+	Workspace.Accept Interaction
+	Workspace.Click Attachment Link Facebook
+	Workspace.Mark Interaction Done
+	Workspace.Verify Custom Element	test.png	10
+	[Teardown]	Run	kill.bat
+
+FB - Posts with images are not fetched
+	[Tags]	SMD-3981
+	[Setup]	Start work
+	${POST_ID} =	Facebook.Publish Photo As Customer	${page}	Facebook- Hello	StaticImage.png
+	Workspace.Accept Interaction
+	Workspace.Verify Static Image
+	Workspace.Click Comment Button
+	Workspace.Enter Comment Text	Facebook- Hi OFA
+	Workspace.Send Post
+	Sleep	1m	Wait for agent comment to be published on Facebook
+	${commentExists} =	Facebook.Is Comment Exist	${POST_ID}	Hi OFA
+	Should Be True	${commentExists}
+	Workspace.Mark Interaction Done
+	Facebook.Post Level2 Comment As Customer	${POST_ID}	Hi OFA	Facebook- Hello Again
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+FB: Comments containing video are not getting processed.
+	[Tags]	SMD-3633
+	[Setup]	Start work
+	${Comment_Id} =	Facebook.Send Comment On old post by Admin	Facebook- Hello	StaticImage.png
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Static Image
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+Facebook : Third comment at Level-2 posted by agent throws error
+	[Tags]	SMD-3561
+	[Setup]	Start work
+	Workspace.Open Main Menu
+	Workspace.Open Post Update Dropdown
+	Workspace.Open Facebook Outbound Interaction
+	Workspace.Select Facebook Account	application page
+	Workspace.Type Post	Facebook- Root post by admin ${PREFIX}
+	Workspace.Send Post
+	Sleep	30s
+	${POST_ID} =	Facebook.Get Agent Post Id	Facebook- Root post by admin ${PREFIX}	${page}
+	Facebook.Comment Post As Customer	${POST_ID}	Facebook- Comment-1 Level-1 by customer
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- Comment-1 Level-2 by agent
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Sleep	30s
+	Facebook.Post Level2 Comment As Customer	${POST_ID}	Facebook- Comment-1 Level-1 by customer	Facebook- Comment-2 Level-2 by customer
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- Comment-3 Level-2 by agent
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+FB:- Agent desktop: when agent delete a post, actionability & sentiments icon should be disabled
+	[Tags]	SMD-3624
+	[Setup]	Start work
+	${POST_ID} =	Facebook.Make Facebook Post	Facebook- I'm posting :) ;) at ${PREFIX} and need your help with that!
+	Set Suite Variable	${POST_ID}
+	Workspace.Accept Incoming Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Delete Facebook Inbound Interaction
+	Sleep	10s
+	${result} =	Workspace.Verify Actionability Not Actionable
+	Should Be Equal	${result}	${false}
+	Workspace.Mark Interaction Done
+	[Teardown]	Run	kill.bat

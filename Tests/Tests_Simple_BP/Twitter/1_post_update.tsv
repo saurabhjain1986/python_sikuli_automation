@@ -1,0 +1,60 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	OperatingSystem
+Library	DateTime
+Suite Setup	Start work
+Suite Teardown	Run	kill.bat
+
+*** Test Cases ***
+Agent post update in Twitter with only text
+	[Tags]	SMD-3822
+	[Documentation]	TW: Unsolicited: Agent post a timeline tweet with only text
+	WDE.Open Main Menu
+	WDE.Open Post Update Dropdown
+	WDE.Open Twitter Outbound Interaction
+	WDE.Type Tweet	Hello, Followers! Hope you all are doing good. ${global_id}
+	WDE.Send Post
+	Twitter.Verify Last Status Agent	Hello, Followers! Hope you all are doing good. ${global_id}
+
+Agent post update in Twitter with image
+	[Tags]	SMD-2113
+	[Documentation]	TW: Unsolicited: Agent post a timeline tweet with image attached
+	WDE.Open Main Menu
+	WDE.Open Post Update Dropdown
+	WDE.Open Twitter Outbound Interaction
+	WDE.Type Tweet	We hope you all will like this image. ${global_id}
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	Twitter.Verify Last Status Agent	We hope you all will like this image. ${global_id}
+
+Agent post update in Twitter with emojis
+	[Tags]	SMD-3824
+	[Documentation]	TW: Unsolicited: Agent post a timeline tweet with emojis
+	WDE.Open Main Menu
+	WDE.Open Post Update Dropdown
+	WDE.Open Twitter Outbound Interaction
+	WDE.Type Tweet	We are glad that you liked the image posted by us :) :D :( ${global_id}
+	WDE.Send Post
+	Twitter.Verify Last Status Agent	We are glad that you liked the image posted by us :) :D :( ${global_id}
+
+Agent post update in Twitter with link
+	[Tags]	SMD-3823
+	[Documentation]	TW: Unsolicited: Agent post a timeline tweet with link
+	WDE.Open Main Menu
+	WDE.Open Post Update Dropdown
+	WDE.Open Twitter Outbound Interaction
+	WDE.Type Tweet	You can checkout more at ${global_id} https://www.google.com/
+	WDE.Send Post
+	Twitter.Verify Last Status Agent	You can checkout more at ${global_id}
+
+
+*** Keywords ***
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	Twitter.Set Twitter Accounts
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}

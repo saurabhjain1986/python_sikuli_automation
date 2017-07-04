@@ -1,0 +1,64 @@
+import socket
+
+ipaddrs = socket.gethostbyname(socket.gethostname())
+
+jenkins_scr_tr = "10.10.24.77"
+local_development = "10.10.24.103"
+jenkins_simple_bp = "10.10.24.44"
+
+# if ipaddrs == local_development:
+# 	admin_page_access_token = "EAAY8cme9ukkBAAEXZArmmamLeCFl8UDimS7YLRAOEsX9PYRz6RCIL11CL8wp4wtQcD9uZBkhyr8vovFiZA6JPJN2kgzKpXyL3M1JKTdY4ul1RcHaMDpUZBaISQZCXpXR97rJ8QSPU6iLk4MBONAbtIFK3lk1EjxERw48hTnw2RgZDZD"
+# 	admin_user_access_token = "EAAY8cme9ukkBADA4ZB1vpdHGC2yyRnZBNXRhhJqJqgmy1ZCRyW0bDT8erB5KuKOZC19VlDI8N0eTibW7G4Ko11xakV1UGnTaVQ1SMIevfziM0x7uOZBDfSJETSRQKn4UVxHT8I6GqMprLR7l80y8lORzZAmQnSdD6Ccg8xeZAVlZCQZDZD"
+# 	customer_user_token = "EAAChJszClZBIBANcjOyDQgWPhCpZCkKEVd2h1qQfAbv39A5w5ZBi6mvHfmbu1809QW9irTMXZBf605v7sJu5X4T4b4hLviBxxlEpdsN2Li4RjCmfZABZCZAn9vOvKcewGFwrdqipspLhwphWT75ldtAE8bBg3BbFg4ZD"
+# 	customer_page_token = "EAAFfFlOA9NABAEbMhYicu4A3X1dSqcuey0AZBeSetLkCDH9TZBnR8bb38PGFIgmaa01z1uGcSp6Tf3AXiYg81jNoe7c7xFeP17B9oiCZBoLfxmmgZB3EzZBM6uJBMsZA94JpPJXCNVKhNQSgkbsIbuAnzqYSeCyP4ZD"
+# 	customer_fb_login = "vedaskumar2014@gmail.com"
+# 	customer_fb_password = "genesys321"
+#
+# 	page_id = "743523095824863"
+# 	full_page_id = "OnlyForAutomationLocal"
+# 	event_id = "1864595617088556"
+# 	note_id = "743523095824863_744171339093372"
+# 	oldPostByAdmin = "743523095824863_744238905753282"
+# 	oldPostByCustomer = "743523095824863_744239395753233"
+
+if ipaddrs == local_development:
+	admin_page_access_token = "EAAY8cme9ukkBAAEXZArmmamLeCFl8UDimS7YLRAOEsX9PYRz6RCIL11CL8wp4wtQcD9uZBkhyr8vovFiZA6JPJN2kgzKpXyL3M1JKTdY4ul1RcHaMDpUZBaISQZCXpXR97rJ8QSPU6iLk4MBONAbtIFK3lk1EjxERw48hTnw2RgZDZD"
+	admin_user_access_token = "EAAY8cme9ukkBADA4ZB1vpdHGC2yyRnZBNXRhhJqJqgmy1ZCRyW0bDT8erB5KuKOZC19VlDI8N0eTibW7G4Ko11xakV1UGnTaVQ1SMIevfziM0x7uOZBDfSJETSRQKn4UVxHT8I6GqMprLR7l80y8lORzZAmQnSdD6Ccg8xeZAVlZCQZDZD"
+	customer_user_token = "EAAChJszClZBIBANcjOyDQgWPhCpZCkKEVd2h1qQfAbv39A5w5ZBi6mvHfmbu1809QW9irTMXZBf605v7sJu5X4T4b4hLviBxxlEpdsN2Li4RjCmfZABZCZAn9vOvKcewGFwrdqipspLhwphWT75ldtAE8bBg3BbFg4ZD"
+	customer_page_token = "EAAFfFlOA9NABAHtn5hPHeXoItgjqR5wLvSZCTkWb8ZABnIChUnDVqytvveUa8AcqHBk5TOh3CzaegT5Rrmx0JxFwkbkaazS3TkZBXo5FD548fUFosoCVhPpqDmIavAfG0VPx3RrMjZCZCXIonS8XVZAKV9UgsZBedhtR6t7YmqDzHHZCMdjJvhlC"
+	customer_fb_login = "user_jljwnlo_local@tfbnw.net"
+	customer_fb_password = "genesys123"
+
+	page_id = "1872103676390498"
+	full_page_id = "WDE-Automation-Local-1872103676390498"
+	event_id = "680739892126124"
+	note_id = "1872103676390498_1906235719643960"
+	oldPostByAdmin = "1872103676390498_1906342666299932"
+	oldPostByCustomer = "1872103676390498_1906345079633024"
+
+elif ipaddrs == jenkins_simple_bp:
+	customer_page_token = "EAAFfFlOA9NABANPHeEpJ3kQSjj9QRgxQ2r93bn5nXGn8ejLiMOwrPWJlKWeemFcl1tkvE8OjUc9l5eDUZBmpMaGViCeV3dfkWgqvRM5wn1YSVgnVdtQXdskmJjFKepGTDRAiZBnXXOJprDuoHZBxZAWF6IZBC2JFzrzyM9ZCSrTpiwTDSUZAMZA8"
+	customer_fb_login = "user_zlnggme_simplebp@tfbnw.net"
+	customer_fb_password = "genesys123"
+
+	page_id = "304101086705145"
+	full_page_id = "WDE-Automation-Simple-BP-304101086705145"
+	event_id = "142658139644635"
+	note_id = "654720901378846_692756210908648"
+	oldPostByAdmin = "304101086705145_304111140037473"
+	oldPostByCustomer = "304101086705145_304117010036886"
+
+elif ipaddrs == jenkins_scr_tr:
+	admin_page_access_token = "EAAFfFlOA9NABAODlC4dKEoYApe3lvzKdSK9WicZAg9MCdbBtTwBbpTBtngjuX62pQXdY0VlUbaRg1sf8E2gB3oon3PhT2n8ezqoyIN6lTFZBbXYby1MS30sh4dJtpT7GZCQ1maHqIswGu22wAMVAe27qGyMhAoZD"
+	admin_user_access_token = "EAAFfFlOA9NABAEI8i1A3ZBfXmDpxkNiDMrZCq7Cigp9ZCZBZBB7hZBer5qcmtifQyXvZCovEVqBJtXx4HacO6r8wGNouWDtT9UxGrjBWIs9pJFHk3xnb1wZAl1LL4K06WUtLq4e7thq6NYawnj2ZCGIDJoLruW7v0rqQabvHthacMZBwZDZD"
+	customer_user_token = "EAAFfFlOA9NABACPTRJeRSO9KmzljHVHLrRHFGPi1M4AwvdMLihjhpVuxkuN5sfPa9POhi3iBrJvfef2ZBZBfvhpi6fZAJniquZCdfpsIGWbJtG5313UZAkTWCYDpmCzzlV03doa1smMhBZCcRVPtQqghIqeBnZBsTEE37faCwByHhsDEDlyvCpd3NuQDs9OAjsZD"
+	customer_page_token = "EAAFfFlOA9NABACsBYSNv9tEUXcbcLGPSYc7ncWbI0EAw5otlReJnHMVwgbZBZCED4HSFuOEzS5hD1dIBx7wSayvCJRjCvAmG7v5iN8qMVQJagnrBJnG2MeuZCkUSZBIzLaX8Ruwwm4FhPsot4RMGVUZBZCw95X8JQZD"
+	customer_fb_login = "saurabhtestuser4@gmail.com"
+	customer_fb_password = "genesys123"
+
+	page_id = "641724062686509"
+	full_page_id = "Only-For-Automation-SCR-641724062686509"
+	event_id = "213076432526441"
+	note_id = "641724062686509_642930569232525"
+	oldPostByAdmin = "641724062686509_642931149232467"
+	oldPostByCustomer = "641724062686509_642931845899064"

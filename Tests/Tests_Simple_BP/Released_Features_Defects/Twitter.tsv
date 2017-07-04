@@ -1,0 +1,173 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+*** Test Cases ***
+Ampersand not correctly displayed for twitter
+	[Tags]	SMD-3731
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- This tweet contains an ampersand & symbol ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Custom Element	WDE.Interactions.Ampersand.png	10
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+Twitter: interaction window should not show action button if this interaction is pulled from workbin-draft queue
+	[Tags]	SMD-3783
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- This tweet contains an ampersand & symbol ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id}
+	WDE.Agent Click Move To Workbin Draft Twitter
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To Twitter Workbin Draft
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	${result} =	WDE.Verify Custom Element	Twitter.ReplyAllTweetButton.png	10
+	Should Be Equal	${result}	${false}
+	${result} =	WDE.Verify Custom Element	Twitter.RetweetButton.png	10
+	Should Be Equal	${result}	${false}
+	[Teardown]	Run	kill.bat
+
+Twitter: Interaction cannot be marked Favorite / Unfavorite after loading from Workbin
+	[Tags]	SMD-3738
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Hello, how are you? ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Favorite
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Custom Element	Twitter.UnFavoriteButton.png	10
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+TW: Actionability value is not retained for the interaction which is moved to workbin
+	[Tags]	SMD-3719
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Hello, how are you? ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Actionability Actionable
+	WDE.Change Actionability To Not Actionable
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	WDE.Verify Actionability Not Actionable
+	WDE.Mark Interaction Done
+	[Teardown]	Run	kill.bat
+
+Agent desktop: Workbin: draft interactions: system is not allowing to delete draft interaction
+	[Tags]	SMD-3478
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Workbin should allow deletion ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	Hi. How can we help you? ${global_id}
+	WDE.Agent Click Move To Workbin Draft Twitter
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To Twitter Workbin Draft
+	WDE.Agent Select Last Interaction From Workbin
+	WDE.Delete Interaction From Workbin
+	[Teardown]	Run	kill.bat
+
+Twitter: Delete option for a direct message on WDE should be removed.
+	[Tags]	SMD-3544
+	[Setup]	Start work
+	Twitter.Customer Send Dm	Twitter- Hi OFA. ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	Hello. How can we help you? ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Scroll Reply Window My History Vertical
+	${result} =	WDE.Verify Custom Element	WDE.MyHistory.Interaction.DeleteButton.png	10
+	Should Be Equal	${result}	${false}
+	[Teardown]	Run	kill.bat
+
+Twitter:- Agent Desktop: Agent should be able to create a new tweet message or reply/retweet with an image attached and available character limit of 140
+	[Tags]	SMD-3630
+	[Setup]	Start work
+	WDE.Open Main Menu
+	WDE.Open Post Update Dropdown
+	WDE.Open Twitter Outbound Interaction
+	WDE.Type Tweet	${global_id} We hope you all will like this image. We hope you all will like this image. We hope you all will like this image. We hope you
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	Twitter.Verify Last Status Agent	${global_id} We hope you all will like this image.
+	[Teardown]	Run	kill.bat
+
+Twitter:- Agent desktop: if customer is a follower then agent should be able to send direct messages from within the history view
+	[Tags]	SMD-3622
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Howdy! ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message My History
+	WDE.Agent Enter Dm Text	Hi. How are you? ${global_id}
+	WDE.Send Post My History
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Dm Customer	Hi. How are you? ${global_id}
+	[Teardown]	Run	kill.bat
+
+Twitter:- Agent desktop: if customer is a follower then agent should see "direct message" button on a tweet interaction in history tab
+	[Tags]	SMD-3621
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Howdy! ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message My History
+	WDE.Agent Enter Dm Text	Hi. How are you? ${global_id}
+	WDE.Send Post My History
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Dm Customer	Hi. How are you? ${global_id}
+	[Teardown]	Run	kill.bat
+
+Twitter: Agent should see "Direct message" button on a tweet interaction when customer is following brand
+	[Tags]	SMD-3228
+	[Setup]	Start work
+	Twitter.Customer Post Tweet	@${brand_mention} Twitter- Howdy! ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	Hello. How can we help you? ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	Hello. How can we help you? ${global_id}
+	[Teardown]	Run	kill.bat

@@ -1,0 +1,77 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+Variables	facebook_config.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+${Comment_Id}
+
+*** Keywords ***
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+
+*** Test Cases ***
+
+Customer send comment on Note with only text and agent reply
+	[Tags]	SMD-4020
+	${PREFIX} =	Get Time	epoch
+	[Setup]	Run Keywords	Start work
+	${Comment_Id} =	Facebook.Send Comment On Note	Facebook- This is an automated comment-1 on Note by customer with only text ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment-2 by agent on Note with only text ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment-2 by agent on Note with only text ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on Note with image and agent reply
+	[Tags]	SMD-4021
+	${PREFIX} =	Get Time	epoch
+	[Setup]	Run Keywords	Start work
+	${Comment_Id} =	Facebook.Send Comment On Note	Facebook- This is an automated comment-1 on Note by customer with image ${PREFIX}	StaticImage.png
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment-2 by agent on Note with image ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment-2 by agent on Note with image ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on Note with link and agent reply
+	[Tags]	SMD-4022
+	${PREFIX} =	Get Time	epoch
+	[Setup]	Run Keywords	Start work
+	${Comment_Id} =	Facebook.Send Comment On Note	Facebook- This is an automated comment-1 on Note by customer with link https://www.google.com ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	Facebook- This is an automated comment-2 by agent on Note with link https://www.google.com ${PREFIX}
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	Facebook- This is an automated comment-2 by agent on Note with link https://www.google.com ${PREFIX}
+	[Teardown]	Run	kill.bat
+
+Customer send comment on Note with emojis and agent reply
+	[Tags]	SMD-4022
+	${PREFIX} =	Get Time	epoch
+	[Setup]	Run Keywords	Start work
+	${Comment_Id} =	Facebook.Send Comment On Note	${PREFIX} Facebook- This is an automated comment-1 on Note by customer with emojis :-) :-D :-(
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	Workspace.Click Last Comment Button
+	Workspace.Enter Comment Text	${PREFIX} Facebook- This is an automated comment-2 by agent on Note with emojis :-) :-D :-(
+	Workspace.Send Post
+	Workspace.Mark Interaction Done
+	Facebook.Is Comment Level2 Exist	${Comment_Id}	${PREFIX} Facebook- This is an automated comment-2 by agent on Note with emojis
+	[Teardown]	Run	kill.bat

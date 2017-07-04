@@ -1,0 +1,16 @@
+syntax: glob
+.idea/
+wde_regress.iml
+target/
+*$py.class
+wde/results/*.*ml
+wde/results/matches/2016-12-27_06-15-50.png
+wde/results/matches/*.*
+*.orig
+wde/results/screenshots/*.*
+results/matches/*.*
+results/screenshots/*.*
+results/*.*ml
+*.iml
+twitter_config.py
+facebook_config.py

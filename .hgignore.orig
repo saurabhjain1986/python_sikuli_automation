@@ -1,0 +1,17 @@
+syntax: glob
+.idea/
+wde_regress.iml
+target/
+*$py.class
+wde/results/
+wde/tests/Facebook/results/
+wde/tests/Twitter/results/
+*.orig
+wde/results/screenshots/*.*
+results/matches/*.*
+results/screenshots/*.*
+results/*.*ml
+<<<<<<< local
+*.iml
+=======
+wde.sikuli/twitter_config.py>>>>>>> other

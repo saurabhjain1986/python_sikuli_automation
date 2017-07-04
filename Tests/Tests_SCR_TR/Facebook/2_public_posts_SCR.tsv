@@ -1,0 +1,106 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem	
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Keywords ***
+Customer makes text only post
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting this at ${PREFIX} and need some assistance!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}	
+
+Customer makes post with hyperlink
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting https://www.google.com/ at ${PREFIX}
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with emojis
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting :) ;) at ${PREFIX} and need your help with that!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with image
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	${POST_ID} =	Facebook.Publish Photo As Customer	${page}	Facebook- I'm posting image at ${PREFIX}	StaticImage.png
+	Set Suite Variable	${POST_ID}
+
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+
+
+*** Test Cases ***
+Customer make root post only with only text
+	[Tags]	SMD-3779
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	[Teardown]	Run	kill.bat
+
+Customer make root post only with link
+	[Tags]	SMD-3781
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	[Teardown]	Run	kill.bat
+
+Customer make root post only with emojis
+	[Tags]	SMD-3782
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	[Teardown]	Run	kill.bat
+
+Customer make root post only with image
+	[Tags]	SMD-3780
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	[Teardown]	Run	kill.bat
+
+Customer make root post with only text and comment
+	[Tags]	SMD-3779
+	[Setup]	Run Keywords	Start work	Customer makes text only post
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	Facebook.Comment Post As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by customer with only text ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Post Count	2
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make root post with link and comment
+	[Tags]	SMD-3781
+	[Setup]	Run Keywords	Start work	Customer makes post with hyperlink
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	Facebook.Comment Post As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by customer with link https://www.google.com ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Post Count	2
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make root post with emojis and comment
+	[Tags]	SMD-3782
+	[Setup]	Run Keywords	Start work	Customer makes post with Emojis
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	Facebook.Comment Post As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by customer with emojis :-) :-D :-( ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Post Count	2
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make root post with image and comment
+	[Tags]	SMD-3780
+	[Setup]	Run Keywords	Start work	Customer makes post with image
+	Workspace.Verify No Interaction Received	Fail: Root post interaction received with Facebook SCR BP.
+	Facebook.Comment Post As Customer	${POST_ID}	Facebook- This is an automated comment level-1 by customer with image ${PREFIX}
+	Workspace.Accept Interaction
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat

@@ -1,0 +1,301 @@
+*** Settings ***
+Library	twitter_api.TwitterApi	WITH NAME	Twitter
+Library	wde.WDE	WITH NAME	WDE
+Library	DateTime
+Library	OperatingSystem
+Suite Setup	Start work
+Suite Teardown	Run	kill.bat
+Variables	twitter_config.py
+
+*** Variables ***
+${brand_mention}	${tw_agent_screen_name}
+${customer_mention}	${tw_screen_name}
+
+*** Test Cases ***
+Customer make new max char tweet with only text and agent reply
+	[Tags]	SMD-4056
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with only text and Agent reply
+	Customer send new tweet	Twitter- This is an automated test tweet with only text with max char max char max char max char max char ma ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent with only text with max char max char max char max char max char ma ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} This is an automated reply tweet by agent with only text with max char max char max char max char max char ma ${global_id}
+
+Customer make new max char tweet with image and agent reply
+	[Tags]	SMD-4057
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with image and Agent reply
+	Customer send new tweet with image	Twitter- This is an automated test tweet with image with max char max char max char max char max char max ch ${global_id}	test.png
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	${global_id} This is an automated reply tweet by agent with image with max char max char max char max char max char max ch
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} ${global_id} This is an automated reply tweet by agent with image with max char
+
+Customer make new max char tweet with link and agent reply
+	[Tags]	SMD-4058
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with link and Agent reply
+	Customer send new tweet	Twitter- This is an automated test tweet with link with max char max char max char m ${global_id} https://www.google.com
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	${global_id} This is an automated reply tweet by agent with link with max char https://www.google.com max char max char m
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} ${global_id} This is an automated reply tweet by agent with link with max char
+
+Customer make new max char tweet with emojis and agent reply
+	[Tags]	SMD-4059
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with emojis and Agent reply
+	Customer send new tweet	Twitter- This is an automated test tweet with emojis with max char max char max char max char ma ${global_id} :-) :-D :-(
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent with emojis with max char max char max char max char ma ${global_id} :-) :-D :-(
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} This is an automated reply tweet by agent with emojis with max char max char max char max char ma ${global_id}
+
+Customer make new max char tweet with only text and agent reply to all
+	[Tags]	SMD-4060
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with only text and Agent reply to all
+	Customer send new tweet	Twitter- This is an automated test tweet2 with only text with max char max char max char max char max char m ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent with only text with max char max char max char max ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} @${brand_mention} This is an automated reply tweet by agent with only text with max char max char max char max ${global_id}
+
+Customer make new max char tweet with image and agent reply to all
+	[Tags]	SMD-4061
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with image and Agent reply to all
+	Customer send new tweet with image	Twitter- This is an automated test tweet2 with image with max char max char max char max char max cha max ch ${global_id}	test.png
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	${global_id} This is an automated reply tweet by agent with image with max char max char max char max cha
+	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} @${brand_mention} ${global_id} This is an automated reply tweet by agent with image with max char
+
+Customer make new max char tweet with link and agent reply to all
+	[Tags]	SMD-4062
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with link and Agent reply to all
+	Customer send new tweet	Twitter- This is an automated test tweet2 with link with max char max char ma char m ${global_id} https://www.google.com
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	${global_id} This is an automated reply tweet by agent with link with max char https://www.google.com ma
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} @${brand_mention} ${global_id} This is an automated reply tweet by agent with link with max char
+
+Customer make new max char tweet with emojis and agent reply to all
+	[Tags]	SMD-4063
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with emojis and Agent reply to all
+	Customer send new tweet	Twitter- This is an automated test tweet2 with emojis with max char max char max char max char m ${global_id} :-) :-D :-(
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply All Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent with emojis with max char max char max ${global_id} :-) :-D :-(
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} @${brand_mention} This is an automated reply tweet by agent with emojis with max char max char max ${global_id}
+
+Customer make new max char tweet with only text and agent retweet
+	[Tags]	SMD-4064
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with only text and Agent retweet
+	Customer send new tweet	Twitter- ${global_id} This is an automated test tweet with only text with max char max char max char max char max char ma
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Retweet
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	RT @${customer_mention}: @${brand_mention} Twitter- ${global_id} This is an automated test tweet with only text with max char
+
+Customer make new max char tweet with image and agent retweet
+	[Tags]	SMD-4065
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with image and Agent retweet
+	Customer send new tweet with image	Twitter- ${global_id} This is an automated test tweet with image with max char max char max char max char max char max ch	test.png
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Retweet
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	RT @${customer_mention}: @${brand_mention} Twitter- ${global_id} This is an automated test tweet with image with max char
+
+Customer make new max char tweet with link and agent retweet
+	[Tags]	SMD-4066
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with link and Agent retweet
+	Customer send new tweet	Twitter- ${global_id} This is an automated test tweet with link with max char max char max char m https://www.google.com
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Retweet
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	RT @${customer_mention}: @${brand_mention} Twitter- ${global_id} This is an automated test tweet with link with max char
+
+Customer make new max char tweet with emojis and agent retweet
+	[Tags]	SMD-4067
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with emojis and Agent retweet
+	Customer send new tweet	Twitter- ${global_id} This is an automated test tweet with emojis with max char max char max char max char ma :-) :-D :-(
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Retweet
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	RT @${customer_mention}: @${brand_mention} Twitter- ${global_id} This is an automated test tweet with emojis with max char
+
+Customer make new max char tweet with only text and agent send DM
+	[Tags]	SMD-4068
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with only text and Agent send DM
+	Customer send new tweet	Twitter- This is an automated test tweet3 with only text with max char max char max char max char max char m ${global_id}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	This is an automated direct message by agent with only text with max char max char max char max ${global_id}
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	This is an automated direct message by agent with only text with max char max char max char max ${global_id}
+
+Customer make new max char tweet with image and agent send DM
+	[Tags]	SMD-4069
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with image and Agent send DM
+	Customer send new tweet with image	Twitter- This is an automated test tweet3 with image with max char max char max char max char max cha max ch ${global_id}	test.png
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	${global_id} This is an automated direct message by agent with image with max char max char max char max cha
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	${global_id} This is an automated direct message by agent with image with max char max char max char max cha
+
+Customer make new max char tweet with link and agent send DM
+	[Tags]	SMD-4070
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with link and Agent send DM
+	Customer send new tweet	Twitter- This is an automated test tweet3 with link with max char max char ma char m ${global_id} https://www.google.com
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	${global_id} This is an automated direct message by agent with link with max char https://www.google.com ma
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	${global_id} This is an automated direct message by agent with link with max char
+
+Customer make new max char tweet with emojis and agent send DM
+	[Tags]	SMD-4071
+	[Documentation]	TW: Public Tweet: Customer send new max char tweet with emojis and Agent send DM
+	Customer send new tweet	Twitter- This is an automated test tweet3 with emojis with max char max char max char max char m ${global_id} :-) :-D :-(
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Direct Message
+	WDE.Agent Enter Dm Text	This is an automated direct message by agent with emojis with max char max char max ${global_id} :-) :-D :-(
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Dm Customer	This is an automated direct message by agent with emojis with max char max char max ${global_id} :-) :-D :-(
+
+
+*** Keywords ***
+Return Timestamp
+	${ts} =	Get Current Date	result_format=%Y%m%d%H%M%S
+	[Return]	${ts}
+
+Start work
+	Run Keywords	WDE.Start App	AND	WDE.Do Login	AND	WDE.Set Agent Status Ready	AND	Twitter.Set Twitter Accounts
+	WDE.Accept Pending Interactions
+	${global_id} =	Run Keyword	Return Timestamp
+	Set Suite Variable	${global_id}
+
+Test Customer make new tweet
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- This is an automated test tweet ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- This is an automated test tweet ${with_option} ${global_id}
+	Agent receive and mark done
+	Run Keyword If	'${with_option}' == 'with image'	Customer reply to own status update with image	Twitter- This is an automated test reply ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer reply to own status update	Twitter- This is an automated test reply ${with_option} ${global_id}
+	Agent receive and mark done
+
+Customer send new tweet
+	[Arguments]	${tweet_text}
+	Twitter.Customer Post Tweet	@${brand_mention} ${tweet_text}
+
+Customer send new tweet with image
+	[Arguments]	${tweet_text}	${image_name}
+	Twitter.Customer Post Tweet With Image	@${brand_mention} ${tweet_text}	${image_name}
+
+Customer reply to own status update
+	[Arguments]	${reply_text}
+	Twitter.Customer Reply To Last Status	@${brand_mention} ${reply_text}
+
+Customer reply to own status update with image
+	[Arguments]	${reply_text}	${image_name}
+	Twitter.Customer Reply To Last Status With Image	@${brand_mention} ${reply_text}	${image_name}
+
+Agent receive and mark done
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+
+Agent receive and reply
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent 2 ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	Twitter.Verify Last Status Agent	@${customer_mention} This is an automated reply tweet by agent 2 ${global_id}
+
+Test Customer make new tweet agent reply
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- This is an automated test tweet 2 ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- This is an automated test tweet 2 ${with_option} ${global_id}
+	Agent receive and reply	${with_option}
+
+Test Customer make new tweet agent reply from workbin
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- This is an automated test tweet 3 ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- This is an automated test tweet 3 ${with_option} ${global_id}
+	Agent receive and reply from workbin	${with_option}
+
+Agent receive and reply from workbin
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Move To Workbin
+	WDE.Agent Navigate To Twitter Workbin Inprogress
+	WDE.Agent Open Last Interaction From Workbin
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent 3 ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post
+	WDE.Mark Interaction Done
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Status Agent	@${customer_mention} This is an automated reply tweet by agent 3 ${global_id}
+
+Test Customer make new tweet agent reply from history
+	[Arguments]	${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	Customer send new tweet with image	Twitter- This is an automated test tweet 4 ${with_option} ${global_id}	test.png
+	Run Keyword If	'${with_option}' != 'with image'	Customer send new tweet	Twitter- This is an automated test tweet 4 ${with_option} ${global_id}
+	Agent receive and reply from history	${with_option}
+
+Agent receive and reply from history
+	[Arguments]	${with_option}
+	WDE.Accept Incoming Interaction
+	WDE.Verify Twitter Interaction Text
+	WDE.Mark Interaction Done
+	WDE.Agent Navigate To My History
+	WDE.Agent Open Last Interaction From History
+	WDE.Verify Twitter Interaction Text
+	WDE.Agent Click Reply Tweet My History
+	WDE.Agent Enter Tweet Text	This is an automated reply tweet by agent 4 ${global_id} ${with_option}
+	Run Keyword If	'${with_option}' == 'with image'	WDE.Attach Image	test.png
+	WDE.Send Post My History
+	WDE.Agent Close Workbin
+	Twitter.Verify Last Status Agent	@${customer_mention} This is an automated reply tweet by agent 4 ${global_id}

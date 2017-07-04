@@ -1,0 +1,50 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Keywords ***
+Customer makes text only post
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Umbrella post by visitor to test old posts 2
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with hyperlink
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting https://www.google.com/ at ${PREFIX}
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with emojis
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	Set Suite Variable	${POST_TEXT}	Facebook- I'm posting :) ;) at ${PREFIX} and need your help with that!
+	${POST_ID} =	Facebook.Make Facebook Post	${POST_TEXT}
+	Set Suite Variable	${POST_ID}
+
+Customer makes post with image
+	${PREFIX} =	Get Time	epoch
+	Set Suite Variable	${PREFIX}
+	${POST_ID} =	Facebook.Publish Photo As Customer	${page}	Facebook- I'm posting image at ${PREFIX}	StaticImage.png
+	Set Suite Variable	${POST_ID}
+
+
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready
+
+
+*** Test Cases ***
+Customer make new post with only text
+	[Tags]	SMD-3779
+	Customer makes text only post

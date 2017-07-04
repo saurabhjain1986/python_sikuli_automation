@@ -1,0 +1,82 @@
+*** Settings ***
+Library	wde.WDE	WITH NAME	Workspace
+Library	facebook_helper.FacebookHelper	WITH NAME	Facebook
+Library	OperatingSystem
+Suite Teardown	Run	kill.bat
+Variables	facebook_helper.py
+
+*** Variables ***
+${PREFIX}
+${POST_ID}
+${POST_TEXT}
+${page}	${page_id}
+
+*** Keywords ***
+Start work
+	Run Keywords	Workspace.Start App	AND	Workspace.Do Login	AND	Workspace.Set Agent Status Ready	AND	Workspace.Accept Pending Interactions
+
+
+*** Test Cases ***
+Customer make new post on event with only text
+	[Tags]	SMD-4016
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with only text ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with image
+	[Tags]	SMD-4017
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with image ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with link
+	[Tags]	SMD-4018
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with link ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with emojis
+	[Tags]	SMD-4019
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with emojis :-) :-D :-( ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with only text and agent reply
+	[Tags]	SMD-4020
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with only text ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with image and agent reply
+	[Tags]	SMD-4021
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with image ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with link and agent reply
+	[Tags]	SMD-4022
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with link ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
+
+Customer make new post on event with emojis and agent reply
+	[Tags]	SMD-4023
+	[Setup]	Run Keywords	Start work
+	Facebook.Make Event Post	Facebook- This is an automated post on event with emojis :-) :-D :-( ${PREFIX}
+	Workspace.Accept Incoming Interaction From Event
+	Workspace.Verify Facebook Interaction Text
+	[Teardown]	Run Keywords	Workspace.Mark Interaction Done	AND	Run	kill.bat
